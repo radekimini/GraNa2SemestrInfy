@@ -1,4 +1,5 @@
 // lini kodu 1170
+//iloœæ klass 21
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -43,8 +44,8 @@ void DrawCharacterPicker();
 
 bool CharacterPicked = false;
 int which=5;
-//RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
-RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
+RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
+//RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
 Player *player;
 
 Player *players[2];
@@ -55,6 +56,7 @@ float DificultyFactor = 1;
 unsigned int DificultyFactorCounter = 0;
 unsigned int textEscCounter = 0;
 int ExhaustCounter = 0;
+unsigned long long FramesCounter = 1;
 
 std::vector<Parts*> enemiesParts;
 std::vector<Bullet*> projectiles;
@@ -360,7 +362,9 @@ void GameFactor() {
     else {
         TimeFactorCounter++;
     }
+    FramesCounter++;
     //std::cout << "Dificulty: " << DificultyFactor << " Time: " << TimeFactor << std::endl;
+    //std::cout << FramesCounter << std::endl;
 }
 void SetStartingVariablesAndOptions() {
     font.loadFromFile("./Resourses/Fonts/game_font.otf");
@@ -490,6 +494,12 @@ void UpdateCharacterPicker() {
         enemies.push_back(new Enemy_normal(window.getSize().y/2, window));
         enemies.push_back(new Enemy_normal(window.getSize().y / 2, window, window.getSize().x / 2));
     }
+    if (FramesCounter % 360 == 0) {
+        players[0]->MakeInvincibleFor(0.03, TimeFactor);
+        players[1]->MakeInvincibleFor(0.03, TimeFactor);
+    }
+    players[0]->InvincibilityEndCheck(TimeFactor);
+    players[1]->InvincibilityEndCheck(TimeFactor);
     ExhaustCount();
     GameFactor();
 
