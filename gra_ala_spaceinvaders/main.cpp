@@ -1,6 +1,8 @@
 // lini kodu 1170
 //iloœæ klass 21
 // 
+// NIe dzia³a pokazywanie czasu po ponownym zagraniu!!!
+// 
 //dodaj vector z wskaŸnikami playerami
 // dodac zmienna iloœæ playerów domyœlnie ustawiona na 0 i dopiero jak gracz wybierze ile graczy to ustawi siê poprawna wartosæ
 // zmieniæ okno wybór graczy by pokazywa³ sie tylko jak bêdzei wybrana opcja dla 1 gracza
