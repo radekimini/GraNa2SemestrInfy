@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Pliki źródłowe">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Enemies">
+      <UniqueIdentifier>{0fddfc00-087a-4eb7-8ccc-60e9f5a64560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies\Enemy źródłowe">
+      <UniqueIdentifier>{20e76348-7c27-41d2-8ca4-0af992871ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies\enemy nagłówkowe">
+      <UniqueIdentifier>{441c9efa-04cc-4f8a-b569-80e1efabf219}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boosts">
+      <UniqueIdentifier>{a0a031cd-3e44-41d4-a588-5356d0d3ed8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boosts\boost nagłówkowe">
+      <UniqueIdentifier>{b5f06809-ed13-4647-aa96-0ac087ad2538}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boosts\Boost źródłowe">
+      <UniqueIdentifier>{0e7f897b-f064-4ea7-b143-23e7a2a5148f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{3377c909-3536-4fd5-98de-f87619fdda52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Fonts">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resources\Sprites">
+      <UniqueIdentifier>{3706dff0-b1ab-467a-bc0a-2535e47ea4d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Players">
+      <UniqueIdentifier>{3f4dd65e-9af2-4725-9727-e0639959536f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Players\Pliki nagłówkowe">
+      <UniqueIdentifier>{f17d3ba9-dff1-42ea-ae10-66595494e475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Players\Pliki źródłowe">
+      <UniqueIdentifier>{795bc140-5d42-47a7-b032-cb519f97a92b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullets">
+      <UniqueIdentifier>{89138988-01f5-48bb-9e59-929b61f35034}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullets\Pliki źródłowe">
+      <UniqueIdentifier>{bbcced95-556c-4359-8822-1ea5e98d675a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullets\Pliki nagłówkowe">
+      <UniqueIdentifier>{80c2b385-7506-4c02-a018-98cc5f8ffd43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explosions">
+      <UniqueIdentifier>{89806a80-858a-4cc0-b1b3-c4022ca48f76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explosions\Pliki źródłowe">
+      <UniqueIdentifier>{985ad979-e1c2-4574-9b5f-eb351d12f378}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explosions\Pliki nagłówkowe">
+      <UniqueIdentifier>{6dd3d02c-374c-4554-b17f-c07cb103e7b4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_boost.cpp">
+      <Filter>Enemies\Enemy źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Enemies\Enemy źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_normal.cpp">
+      <Filter>Enemies\Enemy źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Boost.cpp">
+      <Filter>Boosts\Boost źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Boost_hp.cpp">
+      <Filter>Boosts\Boost źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Boost_invincible.cpp">
+      <Filter>Boosts\Boost źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy_seeker.cpp">
+      <Filter>Enemies\Enemy źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Boost_Skill.cpp">
+      <Filter>Boosts\Boost źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Players\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_5.cpp">
+      <Filter>Players\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_6.cpp">
+      <Filter>Players\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Bullets\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet_6.cpp">
+      <Filter>Bullets\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet_5.cpp">
+      <Filter>Bullets\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Explosions\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion_6.cpp">
+      <Filter>Explosions\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion_5.cpp">
+      <Filter>Explosions\Pliki źródłowe</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemies\enemy nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_boost.h">
+      <Filter>Enemies\enemy nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_normal.h">
+      <Filter>Enemies\enemy nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Boost.h">
+      <Filter>Boosts\boost nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Boost_hp.h">
+      <Filter>Boosts\boost nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Boost_invincible.h">
+      <Filter>Boosts\boost nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_seeker.h">
+      <Filter>Enemies\enemy nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Boost_Skill.h">
+      <Filter>Boosts\boost nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Players\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_5.h">
+      <Filter>Players\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_6.h">
+      <Filter>Players\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Bullets\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_6.h">
+      <Filter>Bullets\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_5.h">
+      <Filter>Bullets\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Explosions\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion_5.h">
+      <Filter>Explosions\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion_6.h">
+      <Filter>Explosions\Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Resourses\Fonts\game_font.otf">
+      <Filter>Resources\Fonts</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resourses\sprites\kosmolud_big.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Shoot.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Ship6.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Ship3animated.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Ship2.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Ship1.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Heart.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Explosion.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\ExhaustEnemySeeker.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\ExhaustEnemyNormal.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\Exhaust_player.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\ExhaustEnemyBoost.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+    <Image Include="Resourses\sprites\black_hole_background.png">
+      <Filter>Resources\Sprites</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
