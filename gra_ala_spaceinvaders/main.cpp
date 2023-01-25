@@ -66,6 +66,7 @@ std::vector<Boost*> boosts;
 
 Font font;
 Text LastScore;
+Text ChoicePlayer;;
 Text CurrentPoints;
 Text pressEsc;
 Text PlayedTime;
@@ -135,6 +136,7 @@ int main() {
         //game close
         if (Keyboard::isKeyPressed(Keyboard::Enter) && player->Gethp() == 0) {
             LastScore.setString("Choose Your Player!");
+            PlayedTime.setString("");
             LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
             CharacterPicked = false;
             explosions.clear();
@@ -371,6 +373,9 @@ void SetStartingVariablesAndOptions() {
     LastScore.setFont(font);
     LastScore.setCharacterSize(window.getSize().y / 9);
     LastScore.setFillColor(Color::White);
+    ChoicePlayer.setFont(font);
+    ChoicePlayer.setCharacterSize(window.getSize().y / 9);
+    ChoicePlayer.setFillColor(Color::White);
     CurrentPoints.setFont(font);
     CurrentPoints.setCharacterSize(window.getSize().y / 30);
     CurrentPoints.setFillColor(Color::White);
@@ -400,8 +405,8 @@ void SetStartingVariablesAndOptions() {
     Parts_normal::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship1.png"); 
     Parts_boost::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship2.png"); 
     Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png"); 
-    LastScore.setString("Choose Your Player!");
-    LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
+    ChoicePlayer.setString("Choose Your Player!");
+    ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
     players[0] = new Player_5(window, false);
     players[1] = new Player_6(window, false);
     player = new Player_6(window,true);
@@ -430,12 +435,7 @@ void GameOverFontSet() {
     LastScore.setString("FINAL SCORE:" + std::to_string(player->GetPoints()));
     LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
     pressEsc.setPosition(((window.getSize().x - pressEsc.getGlobalBounds().width) / 2), ((window.getSize().y - pressEsc.getGlobalBounds().height) / 2) + (window.getSize().y / 5));
-    if (TimeFactorCounter < 10) {
-        PlayedTime.setString("\nPlLAYED TIME " + std::to_string((int)(TimeFactor * 100)) + " sec");
-    }
-    else {
-        PlayedTime.setString("\nPlLAYED TIME " + std::to_string((int)(TimeFactor * 100)) + " sec");
-    }
+    PlayedTime.setString("\nPlLAYED TIME " + std::to_string((int)(TimeFactor * 100)) + " sec");
     PlayedTime.setPosition((window.getSize().x - PlayedTime.getGlobalBounds().width) / 2, ((window.getSize().y - PlayedTime.getGlobalBounds().height) / 2) - (window.getSize().y/10));
 }
 void ExhaustCount() {
@@ -517,7 +517,7 @@ void DrawCharacterPicker() {
         window.draw(projectiles[i]->GetBody());
     }
     if (TimeFactorCounter<30) {
-        window.draw(LastScore);
+        window.draw(ChoicePlayer);
     }
     window.draw(players[0]->GetShip());
     window.draw(players[0]->GetExhaust());
