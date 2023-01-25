@@ -64,6 +64,15 @@
     <Filter Include="Explosions\Pliki nagłówkowe">
       <UniqueIdentifier>{6dd3d02c-374c-4554-b17f-c07cb103e7b4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Parts">
+      <UniqueIdentifier>{4e023b88-ea98-44f8-a125-7a0842340e93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parts\Pliki źródłowe">
+      <UniqueIdentifier>{decf46cb-0db6-4f2b-84fd-2a051c3dcb38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parts\Pliki nagłówkowe">
+      <UniqueIdentifier>{66945274-de18-4c97-aa90-6f3b6a18a4db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -120,6 +129,18 @@
     <ClCompile Include="Explosion_5.cpp">
       <Filter>Explosions\Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="Parts.cpp">
+      <Filter>Parts\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Parts_boost.cpp">
+      <Filter>Parts\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Parts_normal.cpp">
+      <Filter>Parts\Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Parts_seeker.cpp">
+      <Filter>Parts\Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h">
@@ -172,6 +193,18 @@
     </ClInclude>
     <ClInclude Include="Explosion_6.h">
       <Filter>Explosions\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Parts.h">
+      <Filter>Parts\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Parts_boost.h">
+      <Filter>Parts\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Parts_normal.h">
+      <Filter>Parts\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Parts_seeker.h">
+      <Filter>Parts\Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

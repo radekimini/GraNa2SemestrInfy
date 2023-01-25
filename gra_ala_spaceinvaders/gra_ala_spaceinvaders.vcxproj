@@ -160,6 +160,10 @@
     <ClCompile Include="Explosion_5.cpp" />
     <ClCompile Include="Explosion_6.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Parts.cpp" />
+    <ClCompile Include="Parts_boost.cpp" />
+    <ClCompile Include="Parts_normal.cpp" />
+    <ClCompile Include="Parts_seeker.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player_5.cpp" />
     <ClCompile Include="Player_6.cpp" />
@@ -179,6 +183,10 @@
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="Explosion_5.h" />
     <ClInclude Include="Explosion_6.h" />
+    <ClInclude Include="Parts.h" />
+    <ClInclude Include="Parts_boost.h" />
+    <ClInclude Include="Parts_normal.h" />
+    <ClInclude Include="Parts_seeker.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player_5.h" />
     <ClInclude Include="Player_6.h" />

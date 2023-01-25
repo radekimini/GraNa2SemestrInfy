@@ -24,6 +24,10 @@
 #include "Explosion.h"
 #include "Explosion_5.h"
 #include "Explosion_6.h"
+#include "Parts.h"
+#include "Parts_seeker.h"
+#include "Parts_boost.h"
+#include "Parts_normal.h"
 using namespace sf;
 
 void Draw();
@@ -39,8 +43,8 @@ void DrawCharacterPicker();
 
 bool CharacterPicked = false;
 int which=5;
-RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
-//RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
+//RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
+RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
 Player *player;
 
 Player *players[2];
@@ -52,6 +56,7 @@ unsigned int DificultyFactorCounter = 0;
 unsigned int textEscCounter = 0;
 int ExhaustCounter = 0;
 
+std::vector<Parts*> enemiesParts;
 std::vector<Bullet*> projectiles;
 std::vector<Explosion*> explosions;
 std::vector<Enemy*> enemies;
@@ -108,6 +113,7 @@ int main() {
                 explosions.clear();
                 enemies.clear();
                 projectiles.clear();
+                enemiesParts.clear();
             }
         }
         Event event;
@@ -125,13 +131,14 @@ int main() {
             }
         }
         //game close
-        if (Keyboard::isKeyPressed(Keyboard::Enter)/* && player->Gethp() == 0*/) {
+        if (Keyboard::isKeyPressed(Keyboard::Enter) && player->Gethp() == 0) {
             LastScore.setString("Choose Your Player!");
             LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
             CharacterPicked = false;
             explosions.clear();
             enemies.clear();
             projectiles.clear();
+            enemiesParts.clear();
             boosts.clear();
         }
         if (Keyboard::isKeyPressed(Keyboard::Escape)) {
@@ -171,26 +178,34 @@ int main() {
 
 void Draw() {
     window.clear(Color::Black);
+    for (int i = 0; i < enemiesParts.size(); i++) {
+        enemiesParts[i]->PartsDraw(window);
+    }
     for (int i = 0; i < player->Gethp(); i++) {
     player->ShowHp(i,window);
     }
     for (int i = 0; i < player->GetSkillUsageLeft(); i++) {
     player->ShowSkill(i,window);
     }
+    //rusowanie punktow
     CurrentPoints.setPosition(window.getSize().x - 10 - CurrentPoints.getGlobalBounds().width, 5.f);
     CurrentPoints.setString("Points: " + std::to_string(player->GetPoints()));
     window.draw(CurrentPoints);
-    for (size_t i = 0; i < explosions.size(); i++) {
+    //rysowanie eksplozji 
+    for (int i = 0; i < explosions.size(); i++) {
         window.draw(explosions[i]->GetBody());
     }
-    for (size_t i = 0; i < enemies.size(); i++) {
+    //rysowanie enemies
+    for (int i = 0; i < enemies.size(); i++) {
         window.draw(enemies[i]->GetBody());
         window.draw(enemies[i]->GetExhaust());
     }
-    for (size_t i = 0; i < projectiles.size(); i++) {
+    //rysowanie booletow
+    for (int i = 0; i < projectiles.size(); i++) {
         window.draw(projectiles[i]->GetBody());
     }
-    for (size_t i = 0; i < boosts.size(); i++) {
+    //rywowanie boostow
+    for (int i = 0; i < boosts.size(); i++) {
         window.draw(boosts[i]->GetBody());
     }
     window.draw(player->GetShip());
@@ -203,7 +218,7 @@ void Update() {
     player->ExhaustAnimation(ExhaustCounter);
     player->InvincibilityEndCheck(TimeFactor);
     // ruch i dotarcie do konca bulletow
-    for (size_t i = 0; i < projectiles.size(); i++) {
+    for (int i = 0; i < projectiles.size(); i++) {
         if (projectiles[i]->BulletDestroy(window)) {
             projectiles.erase(projectiles.begin()+i);
             player->TakePoints(2);
@@ -211,7 +226,7 @@ void Update() {
         projectiles[i]->BulletMove();
     }
     // czy enemy doszed³ do koñca
-    for (size_t i = 0; i < enemies.size(); i++) {
+    for (int i = 0; i < enemies.size(); i++) {
         if (enemies[i]->EnemyAtEnd(window)) {
             enemies.erase(enemies.begin()+i);
             player->TakePoints(50);
@@ -219,8 +234,8 @@ void Update() {
         enemies[i]->EnemyMovement(DificultyFactor,*player);
     }
     // kolizja buulet z enemies
-    for (size_t i = 0; i < projectiles.size(); i++) {
-        for (size_t j = 0; j < enemies.size(); j++) {
+    for (int i = 0; i < projectiles.size(); i++) {
+        for (int j = 0; j < enemies.size(); j++) {
             if (projectiles[i]->GetBody().getGlobalBounds().intersects(enemies[j]->GetBody().getGlobalBounds())) {
                 if (enemies[j]->GetClassName() == "BOOST") {
                     int spawnCheck = rand() % 101;
@@ -228,6 +243,7 @@ void Update() {
                     if (spawnCheck < 20) {
                         boosts.push_back(new Boost_invincible(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y), TimeFactor));
                     }
+                    enemiesParts.push_back(new Parts_boost(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y,TimeFactor));
                 }
                 else if (enemies[j]->GetClassName() == "SEEKER") {
                     int spawnCheck = rand() % 101;
@@ -235,6 +251,7 @@ void Update() {
                     if (spawnCheck < 10) {
                         boosts.push_back(new Boost_hp(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y), TimeFactor));
                     }
+                    enemiesParts.push_back(new Parts_seeker(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y,TimeFactor));
                 }
                 else if (enemies[j]->GetClassName() == "NORMAL") {
                     int spawnCheck = rand() % 101;
@@ -242,6 +259,7 @@ void Update() {
                     if (spawnCheck < 10) {
                         boosts.push_back(new Boost_Skill(Vector2f(enemies[j]->GetBody().getPosition().x-55, enemies[j]->GetBody().getPosition().y), TimeFactor,which));
                     }
+                    enemiesParts.push_back(new Parts_normal(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y,TimeFactor));
                 }
                 if (projectiles[i]->BulletType() == 5) {
                 explosions.push_back(new Explosion_5(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y)));
@@ -257,7 +275,7 @@ void Update() {
         }
     }
     // kolizja playera z enemies
-    for (size_t i = 0; i < enemies.size(); i++) {
+    for (int i = 0; i < enemies.size(); i++) {
         if (player->GetShip().getGlobalBounds().intersects(enemies[i]->GetBody().getGlobalBounds())) {
             if (which == 5) {
                 explosions.push_back(new Explosion_5(Vector2f(enemies[i]->GetBody().getPosition().x, enemies[i]->GetBody().getPosition().y)));
@@ -272,7 +290,7 @@ void Update() {
         }
     }
     // kolizja playera z boostami
-    for (size_t i = 0; i < boosts.size(); i++) {
+    for (int i = 0; i < boosts.size(); i++) {
         if (player->GetShip().getGlobalBounds().intersects(boosts[i]->GetBody().getGlobalBounds())) {
             if (boosts[i]->GetClassName() == "INVINCIBLE") {
                 player->MakeInvincibleFor(0.03, TimeFactor);
@@ -287,30 +305,40 @@ void Update() {
         }
     }
     // usuwanie boostow po x sekundach
-    for (size_t i = 0; i < boosts.size(); i++) {
+    for (int i = 0; i < boosts.size(); i++) {
         if (TimeFactor - boosts[i]->GetSpawnDificultyFactor() > 0.04) {
             boosts.erase(boosts.begin() + i);
         }
     }
     // animacja boostow
-    for (size_t i = 0; i < boosts.size(); i++) {
+    for (int i = 0; i < boosts.size(); i++) {
         boosts[i]->AnimateBoost();
         boosts[i]->AnimationCounterer();
     }
     //animacja pociskow
-    for (size_t i = 0; i < projectiles.size(); i++) {
+    for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->AnimateBoolet();
     }
     //animacja eksplozji
-    for (size_t i = 0; i < explosions.size(); i++) {
+    for (int i = 0; i < explosions.size(); i++) {
         explosions[i]->Display();
         if (explosions[i]->GetFrameCounter() >= 66) {
             explosions.erase(explosions.begin() + i);
         }
     }
     //animacja exhaustów
-    for (size_t i = 0; i < enemies.size(); i++) {
+    for (int i = 0; i < enemies.size(); i++) {
         enemies[i]->ExhaustAnimate(ExhaustCounter);
+    }
+    //ruch partsow i usuwanie
+    for (int i = 0; i < enemiesParts.size(); i++) {
+        if (enemiesParts[i]->PartsDissaper(TimeFactor)) {
+            enemiesParts.erase(enemiesParts.begin() + i);
+        }
+        else {
+        float los = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        enemiesParts[i]->PartsMove(los);
+        }
     }
     ExhaustCount();
 }
@@ -365,6 +393,9 @@ void SetStartingVariablesAndOptions() {
     Bullet_6::BodyTexture.loadFromFile("./Resourses/sprites/Shoot_6.png");
     Explosion_5::ExplosionTexture.loadFromFile("./Resourses/sprites/Explosion_5.png"); 
     Explosion_6::ExplosionTexture.loadFromFile("./Resourses/sprites/Explosion_6.png"); 
+    Parts_normal::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship1.png"); 
+    Parts_boost::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship2.png"); 
+    Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png"); 
     LastScore.setString("Choose Your Player!");
     LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
     players[0] = new Player_5(window, false);
@@ -416,22 +447,22 @@ void UpdateCharacterPicker() {
     players[1]->ExhaustAnimation(ExhaustCounter);
 
     //animacja pociskow
-    for (size_t i = 0; i < projectiles.size(); i++) {
+    for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->AnimateBoolet();
     }
     //animacja eksplozji
-    for (size_t i = 0; i < explosions.size(); i++) {
+    for (int i = 0; i < explosions.size(); i++) {
         explosions[i]->Display();
         if (explosions[i]->GetFrameCounter() >= 66) {
             explosions.erase(explosions.begin() + i);
         }
     }
     //animacja exhaustów
-    for (size_t i = 0; i < enemies.size(); i++) {
+    for (int i = 0; i < enemies.size(); i++) {
         enemies[i]->ExhaustAnimate(ExhaustCounter);
     }
-    for (size_t i = 0; i < projectiles.size(); i++) {
-        for (size_t j = 0; j < enemies.size(); j++) {
+    for (int i = 0; i < projectiles.size(); i++) {
+        for (int j = 0; j < enemies.size(); j++) {
             if (projectiles[i]->GetBody().getGlobalBounds().intersects(enemies[j]->GetBody().getGlobalBounds())) {
                 if (projectiles[i]->BulletType() == 5) {
                     explosions.push_back(new Explosion_5(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y)));
@@ -445,10 +476,10 @@ void UpdateCharacterPicker() {
             }
         }
     }
-    for (size_t i = 0; i < projectiles.size(); i++) {
+    for (int i = 0; i < projectiles.size(); i++) {
         projectiles[i]->BulletMove();
     }
-    for (size_t i = 0; i < enemies.size(); i++) {
+    for (int i = 0; i < enemies.size(); i++) {
         enemies[i]->EnemyMovement(DificultyFactor,*players[0]);
     }
     if (TimeFactorCounter == 15) {
@@ -465,14 +496,14 @@ void UpdateCharacterPicker() {
 }
 void DrawCharacterPicker() {
     window.clear(Color::Black);
-    for (size_t i = 0; i < explosions.size(); i++) {
+    for (int i = 0; i < explosions.size(); i++) {
         window.draw(explosions[i]->GetBody());
     }
-    for (size_t i = 0; i < enemies.size(); i++) {
+    for (int i = 0; i < enemies.size(); i++) {
         window.draw(enemies[i]->GetBody());
         window.draw(enemies[i]->GetExhaust());
     }
-    for (size_t i = 0; i < projectiles.size(); i++) {
+    for (int i = 0; i < projectiles.size(); i++) {
         window.draw(projectiles[i]->GetBody());
     }
     if (TimeFactorCounter<30) {
