@@ -150,4 +150,3 @@ int Player::GetSkillUsageLeft() { return SkillUsageLeft; }
 Sprite Player::GetShip() {return ship;}
 bool Player::IsInvincible() { return Invincible; }
 unsigned int Player::GetPoints() { return Points; }
-void Player::setTexture(){}

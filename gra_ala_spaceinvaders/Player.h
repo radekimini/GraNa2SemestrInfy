@@ -22,27 +22,26 @@ protected:
 	Sprite Exhaust;
 public:
 	Player();
+	static Texture HeartTexture;
 	virtual void PlayerMovement(RenderWindow &window);
 	virtual void Schoot(std::vector<Bullet*>& projectiles);
 	virtual void ReciveDamage();
 	virtual void ShowHp(float i, RenderWindow& window);
 	virtual void ShowSkill(float i, RenderWindow& window);
+	virtual void SetMovementFactor(float factor);
 	virtual void GetKill(float factor);
 	virtual void TakePoints(unsigned int ptk);
-	virtual unsigned int GetPoints();
-	virtual Sprite GetShip();
-	virtual Sprite GetExhaust();
-	virtual void SetMovementFactor(float factor);
-	virtual int Gethp();
 	virtual int GetSkillUsageLeft();
 	virtual void addhp();
 	virtual void AddSkillUsage();
 	virtual bool IsInvincible();
 	virtual void MakeInvincibleFor(float sec, float factor);
 	virtual void InvincibilityEndCheck(float factor);
-	virtual void setTexture();
-	static Texture HeartTexture;
 	virtual void UseSkill(std::vector<Bullet*>& projectiles, RenderWindow& window);
 	virtual void ExhaustAnimation(int ExhaustCounter);
+	virtual unsigned int GetPoints();
+	virtual Sprite GetShip();
+	virtual Sprite GetExhaust();
+	virtual int Gethp();
 };
 
