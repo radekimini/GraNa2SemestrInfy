@@ -49,7 +49,6 @@ void Update();
 void UpdateCharacterPicker();
 void SetStartingVariablesAndOptions();
 
-
 bool CharacterPicked = false;
 int NumberOfPlayers = 0;
 bool secondPlayerGotKilled = false;
@@ -66,6 +65,8 @@ unsigned int DificultyFactorCounter = 0;
 unsigned int textEscCounter = 0;
 int ExhaustCounter = 0;
 unsigned long long FramesCounter = 1;
+unsigned int GalaxyBackGroundCounter = 0;
+unsigned int GalaxyBackGroundFrame = 0;
 
 std::vector<Parts*> enemiesParts;
 std::vector<Bullet*> projectiles;
@@ -81,6 +82,14 @@ Text LastScore;
 Text ChoicePlayer;
 Text pressEsc;
 Text PlayedTime;
+
+Texture BackGroundGalaxyTexture;
+Sprite BackGroundGalaxyImage;
+Texture BackGroundTexture;
+Sprite BackGroundImage;
+Texture Planet1BackGroundTexture;
+Sprite Planet1BackGroundImage;
+
 
 int main() {
     srand(time(NULL));
@@ -242,6 +251,9 @@ void CurrentPointsFontSet() {
 }
 void Draw() {
     window.clear(Color::Black);
+    window.draw(BackGroundImage);
+    window.draw(BackGroundGalaxyImage);
+    window.draw(Planet1BackGroundImage);
     for (int i = 0; i < enemiesParts.size(); i++) {
         enemiesParts[i]->PartsDraw(window);
     }
@@ -478,6 +490,9 @@ void Update() {
         enemiesParts[i]->PartsMove(los);
         }
     }
+    //Animacja t³a
+    BackGroundGalaxyImage.setTextureRect(IntRect(GalaxyBackGroundFrame * 650, 0, 650, 650));
+    Planet1BackGroundImage.setTextureRect(IntRect(GalaxyBackGroundFrame * 300, 0, 300, 300));
     ExhaustCount();
 }
 
@@ -539,6 +554,16 @@ void GameFactor() {
     }
     else {
         TimeFactorCounter++;
+    }
+    if (GalaxyBackGroundFrame == 24) {
+        GalaxyBackGroundFrame = 0;
+    }
+    if (GalaxyBackGroundCounter == 20) {
+        GalaxyBackGroundCounter = 0;
+        GalaxyBackGroundFrame++;
+    }
+    else {
+        GalaxyBackGroundCounter++;
     }
     FramesCounter++;
 }
@@ -719,6 +744,17 @@ void SetStartingVariablesAndOptions() {
     Parts_normal::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship1.png"); 
     Parts_boost::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship2.png"); 
     Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png"); 
+    BackGroundTexture.loadFromFile("./Resourses/sprites/SpaceBackground.png");
+    BackGroundGalaxyTexture.loadFromFile("./Resourses/sprites/galaxy_background.png");
+    Planet1BackGroundTexture.loadFromFile("./Resourses/sprites/IcePlanetBackGround.png");
+    Planet1BackGroundImage.setTexture(Planet1BackGroundTexture);
+    Planet1BackGroundImage.setTextureRect(IntRect(0, 0, 300, 300));
+    Planet1BackGroundImage.setScale(0.75f, 0.75f);
+    Planet1BackGroundImage.setPosition(950.f, 700.f);
+    BackGroundGalaxyImage.setTexture(BackGroundGalaxyTexture);
+    BackGroundGalaxyImage.setTextureRect(IntRect(0, 0, 650, 650));
+    BackGroundGalaxyImage.setPosition(1000.f, 20.f);
+    BackGroundImage.setTexture(BackGroundTexture);
     CharacterPickerPlayers[0] = new Player_5(window, false);
     CharacterPickerPlayers[1] = new Player_6(window, false);
 }
