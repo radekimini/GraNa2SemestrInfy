@@ -50,6 +50,7 @@ void SetStartingVariablesAndOptions();
 void GameOver();
 void GameOverFontSet();
 void ExhaustCount();
+void CurrentPointsFontSet();
 
 void UpdateCharacterPicker();
 void DrawCharacterPicker();
@@ -105,11 +106,11 @@ int main() {
                     }
                     if ((Keyboard::isKeyPressed(Keyboard::Left)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x <= window.getSize().x / 2)) {
                         CharacterPicked = true;
-                        PlayablePlayers[0] = new Player_5(window, true);
+                        PlayablePlayers.push_back(new Player_5(window, true));
                     }
                     if ((Keyboard::isKeyPressed(Keyboard::Right)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x > window.getSize().x / 2)) {
                         CharacterPicked = true;
-                        PlayablePlayers[0] = new Player_6(window, true);
+                        PlayablePlayers.push_back(new Player_6(window, true));
                     }
                 }
                 if (Keyboard::isKeyPressed(Keyboard::Escape)) {
@@ -128,6 +129,7 @@ int main() {
                     enemies.clear();
                     projectiles.clear();
                     enemiesParts.clear();
+                    CurrentPointsFontSet();
                 }
             }
         }
@@ -163,11 +165,13 @@ int main() {
             projectiles.clear();
             enemiesParts.clear();
             boosts.clear();
+            PlayablePlayers.clear();
+            CurrentPoints.clear();
         }
         if (Keyboard::isKeyPressed(Keyboard::Escape)) {
             window.close();
         }
-        if ((PlayablePlayers[0]->Gethp() == 0 && NumberOfPlayers == 1) || (PlayablePlayers[0]->Gethp() == 0 && PlayablePlayers[1]->Gethp() == 0 && NumberOfPlayers == 2)) {
+        if ((PlayablePlayers[0]->Gethp() > 0 && NumberOfPlayers == 1) || (PlayablePlayers[0]->Gethp() > 0 && PlayablePlayers[1]->Gethp() > 0 && NumberOfPlayers == 2)) {
             if (Enemy::SpawnTimer > (46 - (TimeFactor*5))) {
                 int SpawnCheck = rand() % 101;
                 if (SpawnCheck < 2.0 + ((DificultyFactor - 1.0) * 10.0) + 1.0) {
@@ -204,12 +208,12 @@ void Draw() {
     for (int i = 0; i < enemiesParts.size(); i++) {
         enemiesParts[i]->PartsDraw(window);
     }
-    for (int i = 0; i < PlayablePlayers.size(); i++) {
-        for (int i = 0; i < PlayablePlayers[i]->Gethp(); i++) {
-        PlayablePlayers[i]->ShowHp(i,window);
+    for (int j = 0; j < PlayablePlayers.size(); j++) {
+        for (int i = 0; i < PlayablePlayers[j]->Gethp(); i++) {
+        PlayablePlayers[j]->ShowHp(i,window);
         }
-        for (int i = 0; i < PlayablePlayers[i]->GetSkillUsageLeft(); i++) {
-        PlayablePlayers[i]->ShowSkill(i,window);
+        for (int i = 0; i < PlayablePlayers[j]->GetSkillUsageLeft(); i++) {
+        PlayablePlayers[j]->ShowSkill(i,window);
         }
     }
     //rysowanie punktow
@@ -221,7 +225,7 @@ void Draw() {
         }
     }
     else if (NumberOfPlayers == 1) {
-        CurrentPoints[0].setPosition((window.getSize().x / 2) - 10 - CurrentPoints[0].getGlobalBounds().width, 5.f);
+        CurrentPoints[0].setPosition((window.getSize().x) - 10 - CurrentPoints[0].getGlobalBounds().width, 5.f);
         CurrentPoints[0].setString("Points: " + std::to_string(PlayablePlayers[0]->GetPoints()));
         window.draw(CurrentPoints[0]);
     }
@@ -368,7 +372,7 @@ void Update() {
     // kolizja PlayablePlayersa z boostami
     for (int i = 0; i < boosts.size(); i++) {
         for (int j = 0; j < PlayablePlayers.size(); j++) {
-            if (PlayablePlayers[i]->GetShip().getGlobalBounds().intersects(boosts[i]->GetBody().getGlobalBounds())) {
+            if (PlayablePlayers[j]->GetShip().getGlobalBounds().intersects(boosts[i]->GetBody().getGlobalBounds())) {
                 if (boosts[i]->GetClassName() == "INVINCIBLE") {
                     PlayablePlayers[j]->MakeInvincibleFor(0.03, TimeFactor);
                 }
@@ -452,11 +456,6 @@ void SetStartingVariablesAndOptions() {
     ChoicePlayer.setFont(font);
     ChoicePlayer.setCharacterSize(window.getSize().y / 9);
     ChoicePlayer.setFillColor(Color::White);
-    for (int i = 0; i < CurrentPoints.size(); i++) {
-    CurrentPoints[i].setFont(font);
-    CurrentPoints[i].setCharacterSize(window.getSize().y / 30);
-    CurrentPoints[i].setFillColor(Color::White);
-    }
     pressEsc.setFont(font);
     pressEsc.setFillColor(Color::White);
     pressEsc.setCharacterSize(window.getSize().y / 15);
@@ -473,9 +472,9 @@ void SetStartingVariablesAndOptions() {
     Enemy_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Ship3animated.png");
     Player::HeartTexture.loadFromFile("./Resourses/sprites/Heart.png");
     Player_5::BodyTexture.loadFromFile("./Resourses/sprites/Ship5.png");
-    Player_5::ExhaustTexture.loadFromFile("./Resourses/sprites/Exhaust_PlayablePlayers_5.png");
+    Player_5::ExhaustTexture.loadFromFile("./Resourses/sprites/Exhaust_player_5.png");
     Player_6::BodyTexture.loadFromFile("./Resourses/sprites/Ship6.png");
-    Player_6::ExhaustTexture.loadFromFile("./Resourses/sprites/Exhaust_PlayablePlayers_6.png");
+    Player_6::ExhaustTexture.loadFromFile("./Resourses/sprites/Exhaust_player_6.png");
     Bullet_5::BodyTexture.loadFromFile("./Resourses/sprites/Shoot_5.png");
     Bullet_6::BodyTexture.loadFromFile("./Resourses/sprites/Shoot_6.png");
     Explosion_5::ExplosionTexture.loadFromFile("./Resourses/sprites/Explosion_5.png"); 
@@ -487,7 +486,14 @@ void SetStartingVariablesAndOptions() {
     ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
     CharacterPickerPlayers[0] = new Player_5(window, false);
     CharacterPickerPlayers[1] = new Player_6(window, false);
-    PlayablePlayers.push_back(new Player_6(window, true));
+    //PlayablePlayers.push_back(new Player_6(window, true));
+}
+void CurrentPointsFontSet() {
+    for (int i = 0; i < CurrentPoints.size(); i++) {
+        CurrentPoints[i].setFont(font);
+        CurrentPoints[i].setCharacterSize(window.getSize().y / 30);
+        CurrentPoints[i].setFillColor(Color::White);
+    }
 }
 void GameOver() {
     if (CharacterPicked) {
