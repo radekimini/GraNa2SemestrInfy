@@ -1,13 +1,5 @@
 // lini kodu 1170
 //iloœæ klass 21
-// 
-//dodaj vector z wskaŸnikami playerami
-// dodac zmienna iloœæ playerów domyœlnie ustawiona na 0 i dopiero jak gracz wybierze ile graczy to ustawi siê poprawna wartosæ
-// zmieniæ okno wybór graczy by pokazywa³ sie tylko jak bêdzei wybrana opcja dla 1 gracza
-//zmienic wszystko co wykonuje siê na playerach na pêtle by wykonywa³o sie na obu
-//dodac sterowanie slternatywne strza³kami i dodaæ do metody PlayerMove kolejn¹ zmienna przekazywan¹ z domyœl¹ wartoœcia, ¿e jest to 1 gracz ale jak bêdzê drugi to dodaæ alternatywne sterowanie strza³kami
-// dodac warunek w strzale, ¿e jak spacja to strzela 1 gracz a jak ctrl albo coœ innego to drugi ale tylko jak zmienna ilkoœæ graczy bêdzie wynosic 2
-//
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
