@@ -1,8 +1,6 @@
 // lini kodu 1170
 //iloœæ klass 21
 // 
-// NIe dzia³a pokazywanie czasu po ponownym zagraniu!!!
-// 
 //dodaj vector z wskaŸnikami playerami
 // dodac zmienna iloœæ playerów domyœlnie ustawiona na 0 i dopiero jak gracz wybierze ile graczy to ustawi siê poprawna wartosæ
 // zmieniæ okno wybór graczy by pokazywa³ sie tylko jak bêdzei wybrana opcja dla 1 gracza
@@ -54,11 +52,11 @@ void DrawCharacterPicker();
 
 bool CharacterPicked = false;
 int which=5;
-RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
-//RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
+//RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
+RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
 Player *player;
 
-Player *players[2];
+Player *CharacterPickerPlayers[2];
 
 float TimeFactor = 0;
 unsigned int TimeFactorCounter = 0;
@@ -117,8 +115,8 @@ int main() {
                 return 0;
             }
             if (CharacterPicked) {
-                players[0];
-                players[1];
+                CharacterPickerPlayers[0];
+                CharacterPickerPlayers[1];
                 TimeFactor = 0;
                 TimeFactorCounter = 0;
                 DificultyFactor = 1;
@@ -145,7 +143,6 @@ int main() {
         }
         //game close
         if (Keyboard::isKeyPressed(Keyboard::Enter) && player->Gethp() == 0) {
-            LastScore.setString("Choose Your Player!");
             PlayedTime.setString("");
             LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
             CharacterPicked = false;
@@ -417,31 +414,34 @@ void SetStartingVariablesAndOptions() {
     Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png"); 
     ChoicePlayer.setString("Choose Your Player!");
     ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
-    players[0] = new Player_5(window, false);
-    players[1] = new Player_6(window, false);
+    CharacterPickerPlayers[0] = new Player_5(window, false);
+    CharacterPickerPlayers[1] = new Player_6(window, false);
     player = new Player_6(window,true);
     which = 6;
 }
 void GameOver() {
-    window.clear(Color::Black);
-    if (PlayedTime.getString() == "") {
-        GameOverFontSet();
+    if (CharacterPicked) {
+        window.clear(Color::Black);
+        if (PlayedTime.getString() == "") {
+            GameOverFontSet();
+        }
+        window.draw(LastScore);
+        window.draw(PlayedTime);
+        if (textEscCounter <= 60) {
+            window.draw(pressEsc);
+            textEscCounter++;
+        }
+        if (textEscCounter > 60 && textEscCounter < 120) {
+            textEscCounter++;
+        }
+        if (textEscCounter == 120) {
+            textEscCounter = 0;
+        }
+        window.display();
     }
-    window.draw(LastScore);
-    window.draw(PlayedTime);
-    if (textEscCounter <= 60) {
-        window.draw(pressEsc);
-        textEscCounter++;
-    }
-    if (textEscCounter > 60 && textEscCounter < 120) {
-        textEscCounter++;
-    }
-    if (textEscCounter == 120) {
-        textEscCounter = 0;
-    }
-    window.display();
 }
 void GameOverFontSet() {
+    std::cout << "ustawienia czcionek\n";
     LastScore.setString("FINAL SCORE:" + std::to_string(player->GetPoints()));
     LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
     pressEsc.setPosition(((window.getSize().x - pressEsc.getGlobalBounds().width) / 2), ((window.getSize().y - pressEsc.getGlobalBounds().height) / 2) + (window.getSize().y / 5));
@@ -457,8 +457,8 @@ void ExhaustCount() {
     }
 }
 void UpdateCharacterPicker() {
-    players[0]->ExhaustAnimation(ExhaustCounter);
-    players[1]->ExhaustAnimation(ExhaustCounter);
+    CharacterPickerPlayers[0]->ExhaustAnimation(ExhaustCounter);
+    CharacterPickerPlayers[1]->ExhaustAnimation(ExhaustCounter);
 
     //animacja pociskow
     for (int i = 0; i < projectiles.size(); i++) {
@@ -494,22 +494,22 @@ void UpdateCharacterPicker() {
         projectiles[i]->BulletMove();
     }
     for (int i = 0; i < enemies.size(); i++) {
-        enemies[i]->EnemyMovement(DificultyFactor,*players[0]);
+        enemies[i]->EnemyMovement(DificultyFactor,*CharacterPickerPlayers[0]);
     }
     if (TimeFactorCounter == 15) {
-        players[0]->Schoot(projectiles);
-        players[1]->Schoot(projectiles);
+        CharacterPickerPlayers[0]->Schoot(projectiles);
+        CharacterPickerPlayers[1]->Schoot(projectiles);
     }
     if (TimeFactorCounter == 30) {
         enemies.push_back(new Enemy_normal(window.getSize().y/2, window));
         enemies.push_back(new Enemy_normal(window.getSize().y / 2, window, window.getSize().x / 2));
     }
     if (FramesCounter % 360 == 0) {
-        players[0]->MakeInvincibleFor(0.03, TimeFactor);
-        players[1]->MakeInvincibleFor(0.03, TimeFactor);
+        CharacterPickerPlayers[0]->MakeInvincibleFor(0.03, TimeFactor);
+        CharacterPickerPlayers[1]->MakeInvincibleFor(0.03, TimeFactor);
     }
-    players[0]->InvincibilityEndCheck(TimeFactor);
-    players[1]->InvincibilityEndCheck(TimeFactor);
+    CharacterPickerPlayers[0]->InvincibilityEndCheck(TimeFactor);
+    CharacterPickerPlayers[1]->InvincibilityEndCheck(TimeFactor);
     ExhaustCount();
     GameFactor();
 
@@ -529,10 +529,10 @@ void DrawCharacterPicker() {
     if (TimeFactorCounter<30) {
         window.draw(ChoicePlayer);
     }
-    window.draw(players[0]->GetShip());
-    window.draw(players[0]->GetExhaust());
-    window.draw(players[1]->GetShip());
-    window.draw(players[1]->GetExhaust());
+    window.draw(CharacterPickerPlayers[0]->GetShip());
+    window.draw(CharacterPickerPlayers[0]->GetExhaust());
+    window.draw(CharacterPickerPlayers[1]->GetShip());
+    window.draw(CharacterPickerPlayers[1]->GetExhaust());
 
     window.display();
 }
