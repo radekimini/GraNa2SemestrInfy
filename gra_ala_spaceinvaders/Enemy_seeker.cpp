@@ -32,3 +32,7 @@ void Enemy_seeker::ExhaustAnimate(int ExhaustCounter) {
 		Body.setTextureRect(IntRect(354, 0, 118, 39));
 	}
 }
+void Enemy_seeker::SetSeekingWhom(int _SeekingWhom) {
+	SeekingWhom = _SeekingWhom;
+}
+

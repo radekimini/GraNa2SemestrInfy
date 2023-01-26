@@ -48,3 +48,4 @@ void Enemy::ExhaustAnimate(int ExhaustCounter) {
 		Exhaust.setTextureRect(IntRect(0, 0, 32, 32));
 	}
 }
+void Enemy::SetSeekingWhom(int _SeekingWhom) {}

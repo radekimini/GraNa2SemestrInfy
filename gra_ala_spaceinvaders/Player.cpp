@@ -13,36 +13,70 @@ Player::Player() {
     DificultyFactorWhenInvinciblility = 0;
     InvincibilityTime = 0;
 }
-void Player::PlayerMovement(RenderWindow &window) {
-    if (Keyboard::isKeyPressed(Keyboard::W) && ship.getPosition().y >= 0) {
-        movementY = -1 * MovementFactor;
+void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
+    if (WitchMovement == 0) {
+        if (Keyboard::isKeyPressed(Keyboard::W) && ship.getPosition().y >= 0) {
+            movementY = -1 * MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::W) && ship.getPosition().y < 0) {
+            movementY = 0;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::S) && ship.getPosition().y + ship.getGlobalBounds().height <= window.getSize().y) {
+            movementY = MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::S) && ship.getPosition().y + ship.getGlobalBounds().height  > window.getSize().y) {
+            movementY = 0;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::D) && ship.getPosition().x <= window.getSize().x) {
+            movementX = MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::D) && ship.getPosition().x > window.getSize().x) {
+            movementX = 0;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::A) && ship.getPosition().x >= 5) {
+            movementX = -1 * MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::A) && ship.getPosition().x < 5) {
+            movementX = 0;
+        }
+        if (!Keyboard::isKeyPressed(Keyboard::W) && !Keyboard::isKeyPressed(Keyboard::S)) {
+            movementY = 0;
+        }
+        if (!Keyboard::isKeyPressed(Keyboard::A) && !Keyboard::isKeyPressed(Keyboard::D)) {
+            movementX = 0;
+        }
     }
-    if (Keyboard::isKeyPressed(Keyboard::W) && ship.getPosition().y < 0) {
-        movementY = 0;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::S) && ship.getPosition().y + ship.getGlobalBounds().height <= window.getSize().y) {
-        movementY = MovementFactor;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::S) && ship.getPosition().y + ship.getGlobalBounds().height  > window.getSize().y) {
-        movementY = 0;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::D) && ship.getPosition().x <= window.getSize().x) {
-        movementX = MovementFactor;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::D) && ship.getPosition().x > window.getSize().x) {
-        movementX = 0;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::A) && ship.getPosition().x >= 5) {
-        movementX = -1 * MovementFactor;
-    }
-    if (Keyboard::isKeyPressed(Keyboard::A) && ship.getPosition().x < 5) {
-        movementX = 0;
-    }
-    if (!Keyboard::isKeyPressed(Keyboard::W) && !Keyboard::isKeyPressed(Keyboard::S)) {
-        movementY = 0;
-    }
-    if (!Keyboard::isKeyPressed(Keyboard::A) && !Keyboard::isKeyPressed(Keyboard::D)) {
-        movementX = 0;
+    else if (WitchMovement == 1) {
+        if (Keyboard::isKeyPressed(Keyboard::Up) && ship.getPosition().y >= 0) {
+            movementY = -1 * MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Up) && ship.getPosition().y < 0) {
+            movementY = 0;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Down) && ship.getPosition().y + ship.getGlobalBounds().height <= window.getSize().y) {
+            movementY = MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Down) && ship.getPosition().y + ship.getGlobalBounds().height  > window.getSize().y) {
+            movementY = 0;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x <= window.getSize().x) {
+            movementX = MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x > window.getSize().x) {
+            movementX = 0;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x >= 5) {
+            movementX = -1 * MovementFactor;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x < 5) {
+            movementX = 0;
+        }
+        if (!Keyboard::isKeyPressed(Keyboard::Up) && !Keyboard::isKeyPressed(Keyboard::S)) {
+            movementY = 0;
+        }
+        if (!Keyboard::isKeyPressed(Keyboard::Down) && !Keyboard::isKeyPressed(Keyboard::D)) {
+            movementX = 0;
+        }
     }
     ship.move(movementX, movementY);
     Exhaust.move(movementX, movementY);
@@ -140,7 +174,6 @@ void Player::ExhaustAnimation(int ExhaustCounter) {
         }
     }
 }
-
 Sprite Player::GetExhaust() { return Exhaust; }
 int Player::Gethp() { return hp; }
 int Player::GetSkillUsageLeft() { return SkillUsageLeft; }
@@ -148,3 +181,9 @@ Sprite Player::GetShip() {return ship;}
 bool Player::IsInvincible() { return Invincible; }
 unsigned int Player::GetPoints() { return Points; }
 int Player::GetWich() { return 0; }
+void Player::PlayerLostHp() {
+    if (hp == 0) {
+        ship.setPosition(-100.f, -100.f);
+        hp--;
+    }
+}

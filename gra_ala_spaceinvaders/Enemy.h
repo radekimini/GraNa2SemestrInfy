@@ -18,5 +18,7 @@ public:
 	virtual Sprite GetBody();
 	virtual Sprite GetExhaust();
 	virtual std::string GetClassName();
+	virtual void SetSeekingWhom(int _SeekingWhom);
+
 };
 

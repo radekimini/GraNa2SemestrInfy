@@ -12,5 +12,7 @@ public:
     std::string GetClassName();
     void EnemyMovement(float factor, std::vector<Player*>& PlayablePlayers);
     void ExhaustAnimate(int ExhaustCounter);
+    void SetSeekingWhom(int _SeekingWhom);
+
 };
 
