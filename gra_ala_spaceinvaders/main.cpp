@@ -1,14 +1,12 @@
-// lini kodu 1170
-//iloœæ klass 21
-// 
-// nie dzia³a poruszanie playerem nr 2 
-// nie dzia³¹ pokazywanie siê ekranu wyników gry jest 2 playerów
+// Code lines: 1700
+// Classes number: 21
 //
-//Ship 5 to player[0]
-// 
+// Game writen By Rados³¹w Olejniczak
+// Copping and Sharing without permission ist verbotten
+// For Education or Fun purpoces only
 //
-
-
+// Have Fun ~Creator
+//
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
@@ -39,18 +37,18 @@
 #include "Parts_normal.h"
 using namespace sf;
 
+void CurrentPointsFontSet();
 void Draw();
-void Update();
+void DrawCharacterPicker();
+void EnemySpawner();
+void ExhaustCount();
 void GameFactor();
-void SetStartingVariablesAndOptions();
 void GameOver();
 void GameOverFontSet();
-void ExhaustCount();
-void CurrentPointsFontSet();
-void EnemySpawner();
-
+void Update();
 void UpdateCharacterPicker();
-void DrawCharacterPicker();
+void SetStartingVariablesAndOptions();
+
 
 bool CharacterPicked = false;
 int NumberOfPlayers = 0;
@@ -235,6 +233,13 @@ int main() {
     return 0;
 }
 
+void CurrentPointsFontSet() {
+    for (int i = 0; i < CurrentPoints.size(); i++) {
+        CurrentPoints[i].setFont(font);
+        CurrentPoints[i].setCharacterSize(window.getSize().y / 30);
+        CurrentPoints[i].setFillColor(Color::White);
+    }
+}
 void Draw() {
     window.clear(Color::Black);
     for (int i = 0; i < enemiesParts.size(); i++) {
@@ -536,8 +541,137 @@ void GameFactor() {
         TimeFactorCounter++;
     }
     FramesCounter++;
-    //std::cout << "Dificulty: " << DificultyFactor << " Time: " << TimeFactor << std::endl;
-    //std::cout << FramesCounter << std::endl;
+}
+void GameOver() {
+        window.clear(Color::Black);
+        if (PlayedTime.getString() == "") {
+            GameOverFontSet();
+        }
+        window.draw(LastScore);
+        window.draw(PlayedTime);
+        if (textEscCounter <= 60) {
+            window.draw(pressEsc);
+            textEscCounter++;
+        }
+        if (textEscCounter > 60 && textEscCounter < 120) {
+            textEscCounter++;
+        }
+        if (textEscCounter == 120) {
+            textEscCounter = 0;
+        }
+        window.display();
+}
+void GameOverFontSet() {
+    if (NumberOfPlayers == 1) {
+    LastScore.setString("FINAL SCORE:" + std::to_string(PlayablePlayers[0]->GetPoints()));
+    }
+    else if (NumberOfPlayers == 2) {
+        if (PlayablePlayers[0]->GetPoints() > PlayablePlayers[1]->GetPoints()) {
+            LastScore.setString("PLAYER 1 WINS: " + std::to_string(PlayablePlayers[0]->GetPoints()));
+        }
+        else {
+            LastScore.setString("PLAYER 2 WINS: " + std::to_string(PlayablePlayers[1]->GetPoints()));
+        }
+    }
+    LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
+    pressEsc.setPosition(((window.getSize().x - pressEsc.getGlobalBounds().width) / 2), ((window.getSize().y - pressEsc.getGlobalBounds().height) / 2) + (window.getSize().y / 5));
+    PlayedTime.setString("\nPlLAYED TIME " + std::to_string((int)(TimeFactor * 100)) + " sec");
+    PlayedTime.setPosition((window.getSize().x - PlayedTime.getGlobalBounds().width) / 2, ((window.getSize().y - PlayedTime.getGlobalBounds().height) / 2) - (window.getSize().y/10));
+}
+void ExhaustCount() {
+    if (ExhaustCounter == 40) {
+        ExhaustCounter = 0;
+    }
+    else {
+        ExhaustCounter++;
+    }
+}
+void DrawCharacterPicker() {
+    window.clear(Color::Black);
+    for (int i = 0; i < explosions.size(); i++) {
+        window.draw(explosions[i]->GetBody());
+    }
+    for (int i = 0; i < enemies.size(); i++) {
+        window.draw(enemies[i]->GetBody());
+        window.draw(enemies[i]->GetExhaust());
+    }
+    for (int i = 0; i < projectiles.size(); i++) {
+        window.draw(projectiles[i]->GetBody());
+    }
+    if (TimeFactorCounter<30) {
+        window.draw(ChoicePlayer);
+    }
+    window.draw(CharacterPickerPlayers[0]->GetShip());
+    window.draw(CharacterPickerPlayers[0]->GetExhaust());
+    window.draw(CharacterPickerPlayers[1]->GetShip());
+    window.draw(CharacterPickerPlayers[1]->GetExhaust());
+
+    window.display();
+}
+void UpdateCharacterPicker() {
+    CharacterPickerPlayers[0]->ExhaustAnimation(ExhaustCounter);
+    CharacterPickerPlayers[1]->ExhaustAnimation(ExhaustCounter);
+
+    //animacja pociskow
+    for (int i = 0; i < projectiles.size(); i++) {
+        projectiles[i]->AnimateBoolet();
+    }
+    //animacja eksplozji
+    for (int i = 0; i < explosions.size(); i++) {
+        explosions[i]->Display();
+        if (explosions[i]->GetFrameCounter() >= 66) {
+            explosions.erase(explosions.begin() + i);
+        }
+    }
+    //animacja exhaustów
+    for (int i = 0; i < enemies.size(); i++) {
+        enemies[i]->ExhaustAnimate(ExhaustCounter);
+    }
+    //kolizja playerow z enemiesami
+    for (int i = 0; i < projectiles.size(); i++) {
+        for (int j = 0; j < enemies.size(); j++) {
+            if (projectiles[i]->GetBody().getGlobalBounds().intersects(enemies[j]->GetBody().getGlobalBounds())) {
+                if (projectiles[i]->BulletType() == 5) {
+                    explosions.push_back(new Explosion_5(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y)));
+                }
+                if (projectiles[i]->BulletType() == 6) {
+                    explosions.push_back(new Explosion_6(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y)));
+                }
+                projectiles.erase(projectiles.begin() + i);
+                enemies.erase(enemies.begin() + j);
+                break;
+            }
+        }
+    }
+    //ruch bulletow
+    for (int i = 0; i < projectiles.size(); i++) {
+        projectiles[i]->BulletMove();
+    }
+    //ruch enemies
+    for (int i = 0; i < enemies.size(); i++) {
+        enemies[i]->EnemyMovement(DificultyFactor,PlayablePlayers);
+    }
+    //strzelanie playerow
+    if (TimeFactorCounter == 15) {
+        CharacterPickerPlayers[0]->Schoot(projectiles);
+        CharacterPickerPlayers[1]->Schoot(projectiles);
+    }
+    //spawn enemies
+    if (TimeFactorCounter == 30) {
+        enemies.push_back(new Enemy_normal(window.getSize().y/2, window));
+        enemies.push_back(new Enemy_normal(window.getSize().y / 2, window, window.getSize().x / 2));
+    }
+    //animacja zwiekszenia exhausta
+    if (FramesCounter % 360 == 0) {
+        CharacterPickerPlayers[0]->MakeInvincibleFor(0.03, TimeFactor);
+        CharacterPickerPlayers[1]->MakeInvincibleFor(0.03, TimeFactor);
+    }
+    //sprawdzenie konca animacji wiekszego exhausta
+    CharacterPickerPlayers[0]->InvincibilityEndCheck(TimeFactor);
+    CharacterPickerPlayers[1]->InvincibilityEndCheck(TimeFactor);
+    ExhaustCount();
+    GameFactor();
+
 }
 void SetStartingVariablesAndOptions() {
     font.loadFromFile("./Resourses/Fonts/game_font.otf");
@@ -587,136 +721,4 @@ void SetStartingVariablesAndOptions() {
     Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png"); 
     CharacterPickerPlayers[0] = new Player_5(window, false);
     CharacterPickerPlayers[1] = new Player_6(window, false);
-}
-void CurrentPointsFontSet() {
-    for (int i = 0; i < CurrentPoints.size(); i++) {
-        CurrentPoints[i].setFont(font);
-        CurrentPoints[i].setCharacterSize(window.getSize().y / 30);
-        CurrentPoints[i].setFillColor(Color::White);
-    }
-}
-void GameOver() {
-        window.clear(Color::Black);
-        if (PlayedTime.getString() == "") {
-            GameOverFontSet();
-        }
-        window.draw(LastScore);
-        window.draw(PlayedTime);
-        if (textEscCounter <= 60) {
-            window.draw(pressEsc);
-            textEscCounter++;
-        }
-        if (textEscCounter > 60 && textEscCounter < 120) {
-            textEscCounter++;
-        }
-        if (textEscCounter == 120) {
-            textEscCounter = 0;
-        }
-        window.display();
-}
-void GameOverFontSet() {
-    if (NumberOfPlayers == 1) {
-    LastScore.setString("FINAL SCORE:" + std::to_string(PlayablePlayers[0]->GetPoints()));
-    }
-    else if (NumberOfPlayers == 2) {
-        if (PlayablePlayers[0]->GetPoints() > PlayablePlayers[1]->GetPoints()) {
-            LastScore.setString("PLAYER 1 WINS: " + std::to_string(PlayablePlayers[0]->GetPoints()));
-        }
-        else {
-            LastScore.setString("PLAYER 2 WINS: " + std::to_string(PlayablePlayers[1]->GetPoints()));
-        }
-    }
-    LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
-    pressEsc.setPosition(((window.getSize().x - pressEsc.getGlobalBounds().width) / 2), ((window.getSize().y - pressEsc.getGlobalBounds().height) / 2) + (window.getSize().y / 5));
-    PlayedTime.setString("\nPlLAYED TIME " + std::to_string((int)(TimeFactor * 100)) + " sec");
-    PlayedTime.setPosition((window.getSize().x - PlayedTime.getGlobalBounds().width) / 2, ((window.getSize().y - PlayedTime.getGlobalBounds().height) / 2) - (window.getSize().y/10));
-    //std::cout << "ustawienia czcionek\n";
-}
-void ExhaustCount() {
-    if (ExhaustCounter == 40) {
-        ExhaustCounter = 0;
-    }
-    else {
-        ExhaustCounter++;
-    }
-}
-void UpdateCharacterPicker() {
-    CharacterPickerPlayers[0]->ExhaustAnimation(ExhaustCounter);
-    CharacterPickerPlayers[1]->ExhaustAnimation(ExhaustCounter);
-
-    //animacja pociskow
-    for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->AnimateBoolet();
-    }
-    //animacja eksplozji
-    for (int i = 0; i < explosions.size(); i++) {
-        explosions[i]->Display();
-        if (explosions[i]->GetFrameCounter() >= 66) {
-            explosions.erase(explosions.begin() + i);
-        }
-    }
-    //animacja exhaustów
-    for (int i = 0; i < enemies.size(); i++) {
-        enemies[i]->ExhaustAnimate(ExhaustCounter);
-    }
-    for (int i = 0; i < projectiles.size(); i++) {
-        for (int j = 0; j < enemies.size(); j++) {
-            if (projectiles[i]->GetBody().getGlobalBounds().intersects(enemies[j]->GetBody().getGlobalBounds())) {
-                if (projectiles[i]->BulletType() == 5) {
-                    explosions.push_back(new Explosion_5(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y)));
-                }
-                if (projectiles[i]->BulletType() == 6) {
-                    explosions.push_back(new Explosion_6(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y)));
-                }
-                projectiles.erase(projectiles.begin() + i);
-                enemies.erase(enemies.begin() + j);
-                break;
-            }
-        }
-    }
-    for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->BulletMove();
-    }
-    for (int i = 0; i < enemies.size(); i++) {
-        enemies[i]->EnemyMovement(DificultyFactor,PlayablePlayers);
-    }
-    if (TimeFactorCounter == 15) {
-        CharacterPickerPlayers[0]->Schoot(projectiles);
-        CharacterPickerPlayers[1]->Schoot(projectiles);
-    }
-    if (TimeFactorCounter == 30) {
-        enemies.push_back(new Enemy_normal(window.getSize().y/2, window));
-        enemies.push_back(new Enemy_normal(window.getSize().y / 2, window, window.getSize().x / 2));
-    }
-    if (FramesCounter % 360 == 0) {
-        CharacterPickerPlayers[0]->MakeInvincibleFor(0.03, TimeFactor);
-        CharacterPickerPlayers[1]->MakeInvincibleFor(0.03, TimeFactor);
-    }
-    CharacterPickerPlayers[0]->InvincibilityEndCheck(TimeFactor);
-    CharacterPickerPlayers[1]->InvincibilityEndCheck(TimeFactor);
-    ExhaustCount();
-    GameFactor();
-
-}
-void DrawCharacterPicker() {
-    window.clear(Color::Black);
-    for (int i = 0; i < explosions.size(); i++) {
-        window.draw(explosions[i]->GetBody());
-    }
-    for (int i = 0; i < enemies.size(); i++) {
-        window.draw(enemies[i]->GetBody());
-        window.draw(enemies[i]->GetExhaust());
-    }
-    for (int i = 0; i < projectiles.size(); i++) {
-        window.draw(projectiles[i]->GetBody());
-    }
-    if (TimeFactorCounter<30) {
-        window.draw(ChoicePlayer);
-    }
-    window.draw(CharacterPickerPlayers[0]->GetShip());
-    window.draw(CharacterPickerPlayers[0]->GetExhaust());
-    window.draw(CharacterPickerPlayers[1]->GetShip());
-    window.draw(CharacterPickerPlayers[1]->GetExhaust());
-
-    window.display();
 }
