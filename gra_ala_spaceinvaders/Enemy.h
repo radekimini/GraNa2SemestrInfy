@@ -13,7 +13,7 @@ public:
 	~Enemy();
 	static int SpawnTimer;
 	virtual bool EnemyAtEnd(RenderWindow& window);
-	virtual void EnemyMovement(float factor,Player player);
+	virtual void EnemyMovement(float factor, std::vector<Player*>& PlayablePlayers);
 	virtual void ExhaustAnimate(int ExhaustCounter);
 	virtual Sprite GetBody();
 	virtual Sprite GetExhaust();

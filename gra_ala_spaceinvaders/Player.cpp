@@ -60,8 +60,8 @@ void Player::ReciveDamage() {
         Points -= 500;
     }
 }
-void Player::ShowHp(float i,RenderWindow &window) {
-    if (hp>0) {
+void Player::ShowHp(float i,RenderWindow &window, int PlayerNumer) {
+    if (PlayerNumer == 1) {
         Sprite hart;
         hart.setTexture(HeartTexture);
         hart.setScale(0.2f,0.2f);
@@ -69,18 +69,15 @@ void Player::ShowHp(float i,RenderWindow &window) {
         window.draw(hart);
         //std::cout << hp << std::endl;
     }
+    else {
+        Sprite hart;
+        hart.setTexture(HeartTexture);
+        hart.setScale(0.2f, 0.2f);
+        hart.setPosition(i * 30.0 + (window.getSize().x / 2), 5.f);
+        window.draw(hart);
+    }
 }
-void Player::ShowSkill(float i, RenderWindow& window) {
-    //if (SkillUsageLeft > 0) {
-    //    Sprite prodjectile;
-    //    prodjectile.setTexture(Bullet::BodyTexture);
-    //    prodjectile.setTextureRect(IntRect(116, 0, 58, 12));
-    //    prodjectile.setScale(1.5f, 1.5f);
-    //    prodjectile.rotate(-15);
-    //    prodjectile.setPosition(i * 45 - 25, window.getSize().y-25);
-    //    window.draw(prodjectile);
-    //}
-}
+void Player::ShowSkill(float i, RenderWindow& window, int PlayerNumer) {}
 void Player::TakePoints(unsigned int ptk) {
     if (Points < ptk) {
         Points = 0;
@@ -150,3 +147,4 @@ int Player::GetSkillUsageLeft() { return SkillUsageLeft; }
 Sprite Player::GetShip() {return ship;}
 bool Player::IsInvincible() { return Invincible; }
 unsigned int Player::GetPoints() { return Points; }
+int Player::GetWich() { return 0; }

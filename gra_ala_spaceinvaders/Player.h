@@ -26,8 +26,8 @@ public:
 	virtual void PlayerMovement(RenderWindow &window);
 	virtual void Schoot(std::vector<Bullet*>& projectiles);
 	virtual void ReciveDamage();
-	virtual void ShowHp(float i, RenderWindow& window);
-	virtual void ShowSkill(float i, RenderWindow& window);
+	virtual void ShowHp(float i, RenderWindow& window,int PlayerNumer = 1);
+	virtual void ShowSkill(float i, RenderWindow& window,int PlayerNumer =1);
 	virtual void SetMovementFactor(float factor);
 	virtual void GetKill(float factor);
 	virtual void TakePoints(unsigned int ptk);
@@ -43,5 +43,6 @@ public:
 	virtual Sprite GetShip();
 	virtual Sprite GetExhaust();
 	virtual int Gethp();
+	virtual int GetWich();
 };
 
