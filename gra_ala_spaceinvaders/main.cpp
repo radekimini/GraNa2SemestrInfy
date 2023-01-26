@@ -456,7 +456,7 @@ void Update() {
     }
     // usuwanie boostow po x sekundach
     for (int i = 0; i < boosts.size(); i++) {
-        if (TimeFactor - boosts[i]->GetSpawnDificultyFactor() > 0.04) {
+        if ((double)TimeFactor - boosts[i]->GetSpawnDificultyFactor() > 0.04) {
             boosts.erase(boosts.begin() + i);
         }
     }
