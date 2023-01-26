@@ -31,14 +31,20 @@ void Player_5::UseSkill(std::vector<Bullet*>& projectiles, RenderWindow& window)
         SkillUsageLeft--;
     }
 }
-void Player_5::ShowSkill(float i, RenderWindow& window) {
+void Player_5::ShowSkill(float i, RenderWindow& window, int PlayerNumer) {
     if (SkillUsageLeft > 0) {
-        Sprite prodjectile;
-        prodjectile.setTexture(Bullet_5::BodyTexture);
-        prodjectile.setTextureRect(IntRect(116, 0, 58, 12));
-        prodjectile.setScale(1.5f, 1.5f);
-        prodjectile.rotate(-15);
-        prodjectile.setPosition(i * 45 - 25, window.getSize().y - 25);
-        window.draw(prodjectile);
+            Sprite prodjectile;
+            prodjectile.setTexture(Bullet_5::BodyTexture);
+            prodjectile.setTextureRect(IntRect(116, 0, 58, 12));
+            prodjectile.setScale(1.5f, 1.5f);
+            prodjectile.rotate(-15);
+        if (PlayerNumer == 1) {
+            prodjectile.setPosition(i * 45 - 25 + (window.getSize().x / 2), window.getSize().y - 25);
+        }
+        else {
+            prodjectile.setPosition(i * 45 - 25, window.getSize().y - 25);
+        }
+            window.draw(prodjectile);
     }
 }
+int Player_5::GetWich() { return 5; }

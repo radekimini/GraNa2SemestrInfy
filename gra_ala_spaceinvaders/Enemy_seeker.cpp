@@ -3,7 +3,8 @@
 Texture Enemy_seeker::BodyTexture;
 Texture Enemy_seeker::ExhaustTexture;
 
-Enemy_seeker::Enemy_seeker(int pos, RenderWindow& window) {
+Enemy_seeker::Enemy_seeker(int pos, RenderWindow& window, int _SeekingWhom) {
+	SeekingWhom = _SeekingWhom;
 	Body.setTexture(BodyTexture);
 	Body.setTextureRect(IntRect(0, 0, 118, 39));
 	Body.setScale(1.4f, 1.4f);
@@ -14,8 +15,8 @@ Enemy_seeker::Enemy_seeker(int pos, RenderWindow& window) {
 std::string Enemy_seeker::GetClassName() {
 	return "SEEKER";
 }
-void Enemy_seeker::EnemyMovement(float factor,Player player) {
-	Body.move(-6 - ((factor - 1) * 10), ((player.GetShip().getPosition().y + (player.GetShip().getGlobalBounds().height / 2)) - Body.getPosition().y) / (30 - (factor * 5)));
+void Enemy_seeker::EnemyMovement(float factor, std::vector<Player*>& Players) {
+	Body.move(-6 - ((factor - 1) * 10), ((Players[SeekingWhom]->GetShip().getPosition().y + (Players[SeekingWhom]->GetShip().getGlobalBounds().height / 2)) - Body.getPosition().y) / (30 - (factor * 5)));
 }
 void Enemy_seeker::ExhaustAnimate(int ExhaustCounter) {
 	if (ExhaustCounter == 10) {
@@ -31,3 +32,7 @@ void Enemy_seeker::ExhaustAnimate(int ExhaustCounter) {
 		Body.setTextureRect(IntRect(354, 0, 118, 39));
 	}
 }
+void Enemy_seeker::SetSeekingWhom(int _SeekingWhom) {
+	SeekingWhom = _SeekingWhom;
+}
+

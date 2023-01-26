@@ -27,7 +27,7 @@ bool Enemy::EnemyAtEnd(RenderWindow& window) {
 		return false;
 	}
 }
-void Enemy::EnemyMovement(float factor, Player player) {
+void Enemy::EnemyMovement(float factor, std::vector<Player*>& PlayablePlayers) {
 	Body.move(-6 - ((factor-1) * 10), 0);
 	Exhaust.move(-6 - ((factor-1) * 10), 0);
 }
@@ -48,3 +48,4 @@ void Enemy::ExhaustAnimate(int ExhaustCounter) {
 		Exhaust.setTextureRect(IntRect(0, 0, 32, 32));
 	}
 }
+void Enemy::SetSeekingWhom(int _SeekingWhom) {}

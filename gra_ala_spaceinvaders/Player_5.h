@@ -12,7 +12,7 @@ public:
     static Texture ExhaustTexture;
     static Texture BodyTexture;
     void UseSkill(std::vector<Bullet*>& projectiles, RenderWindow& window);
-    void ShowSkill(float i, RenderWindow& window);
-
+    void ShowSkill(float i, RenderWindow& window, int PlayerNumer = 1);
+    int GetWich();
 };
 
