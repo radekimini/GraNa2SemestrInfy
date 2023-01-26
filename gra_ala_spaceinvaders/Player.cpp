@@ -46,7 +46,7 @@ void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
             movementX = 0;
         }
     }
-    else if (WitchMovement == 1) {
+    if (WitchMovement == 1) {
         if (Keyboard::isKeyPressed(Keyboard::Up) && ship.getPosition().y >= 0) {
             movementY = -1 * MovementFactor;
         }
@@ -59,22 +59,22 @@ void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
         if (Keyboard::isKeyPressed(Keyboard::Down) && ship.getPosition().y + ship.getGlobalBounds().height  > window.getSize().y) {
             movementY = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x <= window.getSize().x) {
+        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x <= window.getSize().x) {
             movementX = MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x > window.getSize().x) {
+        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x > window.getSize().x) {
             movementX = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x >= 5) {
+        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x >= 5) {
             movementX = -1 * MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x < 5) {
+        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x < 5) {
             movementX = 0;
         }
-        if (!Keyboard::isKeyPressed(Keyboard::Up) && !Keyboard::isKeyPressed(Keyboard::S)) {
+        if (!Keyboard::isKeyPressed(Keyboard::Up) && !Keyboard::isKeyPressed(Keyboard::Down)) {
             movementY = 0;
         }
-        if (!Keyboard::isKeyPressed(Keyboard::Down) && !Keyboard::isKeyPressed(Keyboard::D)) {
+        if (!Keyboard::isKeyPressed(Keyboard::Left) && !Keyboard::isKeyPressed(Keyboard::Right)) {
             movementX = 0;
         }
     }
@@ -95,21 +95,16 @@ void Player::ReciveDamage() {
     }
 }
 void Player::ShowHp(float i,RenderWindow &window, int PlayerNumer) {
-    if (PlayerNumer == 1) {
         Sprite hart;
         hart.setTexture(HeartTexture);
         hart.setScale(0.2f,0.2f);
-        hart.setPosition(i * 30.0, 5.f);
-        window.draw(hart);
-        //std::cout << hp << std::endl;
+    if (PlayerNumer == 1) {
+        hart.setPosition(i * 30.0 + (window.getSize().x / 2), 5.f);
     }
     else {
-        Sprite hart;
-        hart.setTexture(HeartTexture);
-        hart.setScale(0.2f, 0.2f);
-        hart.setPosition(i * 30.0 + (window.getSize().x / 2), 5.f);
-        window.draw(hart);
+        hart.setPosition(i * 30.0, 5.f);
     }
+        window.draw(hart);
 }
 void Player::ShowSkill(float i, RenderWindow& window, int PlayerNumer) {}
 void Player::TakePoints(unsigned int ptk) {

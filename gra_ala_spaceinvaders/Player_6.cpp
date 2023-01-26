@@ -39,11 +39,10 @@ void Player_6::ShowSkill(float i, RenderWindow& window, int PlayerNumer) {
         prodjectile.setScale(1.5f, 1.5f);
         prodjectile.rotate(-15);
         if (PlayerNumer == 1) {
-            prodjectile.setPosition(i * 45 - 25, window.getSize().y - 25);
+            prodjectile.setPosition(i * 45 - 25 + (window.getSize().x / 2), window.getSize().y - 25);
         }
         else {
-            Sprite prodjectile;
-            prodjectile.setPosition(i * 45 - 25 + (window.getSize().x / 2), window.getSize().y - 25);
+            prodjectile.setPosition(i * 45 - 25, window.getSize().y - 25);
         }
         window.draw(prodjectile);
     }

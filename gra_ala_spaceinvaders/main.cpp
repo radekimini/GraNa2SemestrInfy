@@ -1,12 +1,8 @@
 // lini kodu 1170
 //iloœæ klass 21
 // 
-//dodaj vector z wskaŸnikami PlayablePlayersami
-// dodac zmienna iloœæ PlayablePlayersów domyœlnie ustawiona na 0 i dopiero jak gracz wybierze ile graczy to ustawi siê poprawna wartosæ
-// zmieniæ okno wybór graczy by pokazywa³ sie tylko jak bêdzei wybrana opcja dla 1 gracza
-//zmienic wszystko co wykonuje siê na PlayablePlayersach na pêtle by wykonywa³o sie na obu
-//dodac sterowanie slternatywne strza³kami i dodaæ do metody PlayerMove kolejn¹ zmienna przekazywan¹ z domyœl¹ wartoœcia, ¿e jest to 1 gracz ale jak bêdzê drugi to dodaæ alternatywne sterowanie strza³kami
-// dodac warunek w strzale, ¿e jak spacja to strzela 1 gracz a jak ctrl albo coœ innego to drugi ale tylko jak zmienna ilkoœæ graczy bêdzie wynosic 2
+// nie dzia³a poruszanie playerem nr 2 
+// nie dzia³¹ pokazywanie siê ekranu wyników gry jest 2 playerów
 //
 //Ship 5 to player[0]
 // 
@@ -51,6 +47,7 @@ void GameOver();
 void GameOverFontSet();
 void ExhaustCount();
 void CurrentPointsFontSet();
+void EnemySpawner();
 
 void UpdateCharacterPicker();
 void DrawCharacterPicker();
@@ -93,48 +90,46 @@ int main() {
         if (NumberOfPlayers == 0) {
             //okno wyboru iloœci graczy
         }
-        if (NumberOfPlayers == 1) {
 
-            while (!CharacterPicked) {
-                UpdateCharacterPicker();
-                DrawCharacterPicker();
-                Event event;
-                while (window.pollEvent(event)) {
-                    //Game close
-                    if (event.type == Event::Closed) {
-                        window.close();
-                        return 0;
-                    }
-                    if ((Keyboard::isKeyPressed(Keyboard::Left)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x <= window.getSize().x / 2)) {
-                        CharacterPicked = true;
-                        PlayablePlayers.push_back(new Player_5(window, true));
-                    }
-                    if ((Keyboard::isKeyPressed(Keyboard::Right)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x > window.getSize().x / 2)) {
-                        CharacterPicked = true;
-                        PlayablePlayers.push_back(new Player_6(window, true));
-                    }
-                }
-                if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+        while (!CharacterPicked && NumberOfPlayers == 1) {
+            UpdateCharacterPicker();
+            DrawCharacterPicker();
+            Event event;
+            while (window.pollEvent(event)) {
+                //Game close
+                if (event.type == Event::Closed) {
                     window.close();
                     return 0;
                 }
-                if (CharacterPicked) {
-                    CurrentPoints.push_back(Text());
-                    CharacterPickerPlayers[0];
-                    CharacterPickerPlayers[1];
-                    TimeFactor = 0;
-                    TimeFactorCounter = 0;
-                    DificultyFactor = 1;
-                    DificultyFactorCounter = 0;
-                    explosions.clear();
-                    enemies.clear();
-                    projectiles.clear();
-                    enemiesParts.clear();
-                    CurrentPointsFontSet();
+                if ((Keyboard::isKeyPressed(Keyboard::Left)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x <= window.getSize().x / 2)) {
+                    CharacterPicked = true;
+                    PlayablePlayers.push_back(new Player_5(window, true));
+                }
+                if ((Keyboard::isKeyPressed(Keyboard::Right)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x > window.getSize().x / 2)) {
+                    CharacterPicked = true;
+                    PlayablePlayers.push_back(new Player_6(window, true));
                 }
             }
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+                window.close();
+                return 0;
+            }
+            if (CharacterPicked) {
+                CurrentPoints.push_back(Text());
+                CharacterPickerPlayers[0];
+                CharacterPickerPlayers[1];
+                TimeFactor = 0;
+                TimeFactorCounter = 0;
+                DificultyFactor = 1;
+                DificultyFactorCounter = 0;
+                explosions.clear();
+                enemies.clear();
+                projectiles.clear();
+                enemiesParts.clear();
+                CurrentPointsFontSet();
+            }
         }
-        if (NumberOfPlayers == 2 && PlayablePlayers.size() <2) {
+        if (NumberOfPlayers == 2 && PlayablePlayers.size() < 2) {
             PlayablePlayers.push_back(new Player_5(window, true));
             CurrentPoints.push_back(Text());
             PlayablePlayers.push_back(new Player_6(window, true));
@@ -177,7 +172,7 @@ int main() {
             }
         }
         //game close
-        if ((Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() == 0 && NumberOfPlayers == 1) || (Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() == 0 && PlayablePlayers[1]->Gethp() == 0 && NumberOfPlayers == 2)) {
+        if ((Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() > 1 && NumberOfPlayers == 1) || (Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() < 1 && PlayablePlayers[1]->Gethp() < 1 && NumberOfPlayers == 2)) { // nie dzia³¹ dla 2 graczy
             PlayedTime.setString("");
             LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
             CharacterPicked = false;
@@ -193,49 +188,19 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::Escape)) {
             window.close();
         }
-        //if ((PlayablePlayers[0]->Gethp() > 0 && NumberOfPlayers == 1)  ||  ( (PlayablePlayers[0]->Gethp() > 0 && PlayablePlayers[1]->Gethp() > 0) && NumberOfPlayers == 2) ) {
-        if ( NumberOfPlayers == 1  ||  NumberOfPlayers == 2) {
-            if (Enemy::SpawnTimer > (46 - (TimeFactor*5))) {
-                int SpawnCheck = rand() % 101;
-                if (SpawnCheck < 2.0 + ((DificultyFactor - 1.0) * 10.0) + 1.0) {
-                    int whitchEnemy = rand() % 3;
-                    whitchEnemy = 2;
-                    //std::cout << whitch << std::endl;
-                    int pos = 50 + rand() % (window.getSize().y - 200);
-                    if (whitchEnemy == 0) {
-                        enemies.push_back(new Enemy_normal(pos,window));
-                    }
-                    if (whitchEnemy == 1) {
-                        enemies.push_back(new Enemy_boost(pos,window));
-                    }
-                    if (whitchEnemy == 2) {
-                        if (NumberOfPlayers == 1) {
-                            enemies.push_back(new Enemy_seeker(pos,window));
-                        }
-                        else if (NumberOfPlayers == 2) {
-                            if (secondPlayerGotKilled) {
-                                if (PlayablePlayers[0]->Gethp() == 0) {
-                                    enemies.push_back(new Enemy_seeker(pos,window,1));
-                                }
-                                else {
-                                    enemies.push_back(new Enemy_seeker(pos,window,0));
-                                }
-                            }
-                            else{
-                                int los = rand() % NumberOfPlayers;
-                                enemies.push_back(new Enemy_seeker(pos,window,los));
-                            }
-                        }
-                    }
-                }
-            }
-            else { Enemy::SpawnTimer++; }
-
+        if ((PlayablePlayers[0]->Gethp() > 0 && NumberOfPlayers == 1)) {
+            EnemySpawner();
             GameFactor();
             Update();
             Draw();
         }
-        if((PlayablePlayers[0]->Gethp() < 1 && NumberOfPlayers == 1) || ((PlayablePlayers[0]->Gethp() < 1 && PlayablePlayers[1]->Gethp() < 1) && NumberOfPlayers == 2)){
+        else if ((PlayablePlayers[0]->Gethp() > 0 || PlayablePlayers[1]->Gethp() > 0) && NumberOfPlayers == 2) {   // Poprawiæ warunek by wywala³ sie jak jeden straci Hp tylko oba
+            EnemySpawner();
+            GameFactor();
+            Update();
+            Draw();
+        }
+        else{
             GameOver();
         }
     }
@@ -266,8 +231,8 @@ void Draw() {
         }
     }
     else if (NumberOfPlayers == 1) {
-        CurrentPoints[0].setPosition((window.getSize().x) - 10 - CurrentPoints[0].getGlobalBounds().width, 5.f);
         CurrentPoints[0].setString("Points: " + std::to_string(PlayablePlayers[0]->GetPoints()));
+        CurrentPoints[0].setPosition((window.getSize().x) - 10 - CurrentPoints[0].getGlobalBounds().width, 5.f);
         window.draw(CurrentPoints[0]);
     }
     //rysowanie eksplozji 
@@ -304,7 +269,7 @@ void Update() {
         PlayablePlayers[i]->ExhaustAnimation(ExhaustCounter);
         PlayablePlayers[i]->InvincibilityEndCheck(TimeFactor);
         }
-        else {
+        else if (NumberOfPlayers == 2){
             for (int i = 0; i < enemies.size(); i++) {
                 if (enemies[i]->GetClassName() == "SEEKER") {
                     if (PlayablePlayers[0]->Gethp() == 0) {
@@ -355,7 +320,7 @@ void Update() {
             if (projectiles[i]->GetBody().getGlobalBounds().intersects(enemies[j]->GetBody().getGlobalBounds())) {
                 if (enemies[j]->GetClassName() == "BOOST") {
                     int spawnCheck = rand() % 101;
-                    //spawnCheck = 1;
+                    spawnCheck = 1;
                     if (spawnCheck < 20) {
                         boosts.push_back(new Boost_invincible(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y), TimeFactor));
                     }
@@ -363,7 +328,7 @@ void Update() {
                 }
                 else if (enemies[j]->GetClassName() == "SEEKER") {
                     int spawnCheck = rand() % 101;
-                    //spawnCheck = 1;
+                    spawnCheck = 1;
                     if (spawnCheck < 10) {
                         boosts.push_back(new Boost_hp(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y), TimeFactor));
                     }
@@ -371,7 +336,7 @@ void Update() {
                 }
                 else if (enemies[j]->GetClassName() == "NORMAL") {
                     int spawnCheck = rand() % 101;
-                    //spawnCheck = 1;
+                    spawnCheck = 1;
                     if (spawnCheck < 10) {
                         if (NumberOfPlayers == 1) {
                             boosts.push_back(new Boost_Skill(Vector2f(enemies[j]->GetBody().getPosition().x-55, enemies[j]->GetBody().getPosition().y), TimeFactor,PlayablePlayers[0]->GetWich()));
@@ -482,6 +447,46 @@ void Update() {
     }
     ExhaustCount();
 }
+
+void EnemySpawner() {
+    if (Enemy::SpawnTimer > (46 - (TimeFactor * 5))) {
+        int SpawnCheck = rand() % 101;
+        if (SpawnCheck < 2.0 + ((DificultyFactor - 1.0) * 10.0) + 1.0) {
+            int whitchEnemy = rand() % 3;
+            whitchEnemy = 2;
+            //std::cout << whitch << std::endl;
+            int pos = 50 + rand() % (window.getSize().y - 200);
+            if (whitchEnemy == 0) {
+                enemies.push_back(new Enemy_normal(pos, window));
+            }
+            if (whitchEnemy == 1) {
+                enemies.push_back(new Enemy_boost(pos, window));
+            }
+            if (whitchEnemy == 2) {
+                if (NumberOfPlayers == 1) {
+                    enemies.push_back(new Enemy_seeker(pos, window));
+                }
+                if (NumberOfPlayers == 2) {
+                    if (secondPlayerGotKilled) {
+                        if (PlayablePlayers[0]->Gethp() < 1) {
+                            enemies.push_back(new Enemy_seeker(pos, window, 0));
+                        }
+                        else {
+                            enemies.push_back(new Enemy_seeker(pos, window, 1));
+                        }
+                    }
+                    else {
+                        int los = rand() % NumberOfPlayers;
+                        enemies.push_back(new Enemy_seeker(pos, window, los));
+                    }
+                }
+            }
+        }
+    }
+    else { Enemy::SpawnTimer++; }
+}
+
+
 void GameFactor() {
     if (DificultyFactor < 2) {
         if (DificultyFactorCounter > 60) {
@@ -544,7 +549,6 @@ void SetStartingVariablesAndOptions() {
     ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
     CharacterPickerPlayers[0] = new Player_5(window, false);
     CharacterPickerPlayers[1] = new Player_6(window, false);
-    //PlayablePlayers.push_back(new Player_6(window, true));
 }
 void CurrentPointsFontSet() {
     for (int i = 0; i < CurrentPoints.size(); i++) {
@@ -554,7 +558,6 @@ void CurrentPointsFontSet() {
     }
 }
 void GameOver() {
-    if (CharacterPicked) {
         window.clear(Color::Black);
         if (PlayedTime.getString() == "") {
             GameOverFontSet();
@@ -572,7 +575,6 @@ void GameOver() {
             textEscCounter = 0;
         }
         window.display();
-    }
 }
 void GameOverFontSet() {
     if (NumberOfPlayers == 1) {
