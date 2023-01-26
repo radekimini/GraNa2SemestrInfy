@@ -53,10 +53,10 @@ void UpdateCharacterPicker();
 void DrawCharacterPicker();
 
 bool CharacterPicked = false;
-int NumberOfPlayers = 2;
+int NumberOfPlayers = 0;
 bool secondPlayerGotKilled = false;
-//RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
-RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
+RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
+//RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
 
 std::vector<Player*>PlayablePlayers;
 Player *CharacterPickerPlayers[2];
@@ -77,8 +77,10 @@ std::vector<Boost*> boosts;
 
 Font font;
 std::vector<Text> CurrentPoints;
+Text OnePlayer;
+Text TwoPlayer;
 Text LastScore;
-Text ChoicePlayer;;
+Text ChoicePlayer;
 Text pressEsc;
 Text PlayedTime;
 
@@ -87,10 +89,31 @@ int main() {
     window.setFramerateLimit(60);
     SetStartingVariablesAndOptions();
     while (window.isOpen()) {
-        if (NumberOfPlayers == 0) {
-            //okno wyboru iloœci graczy
+        while (NumberOfPlayers == 0) {
+            window.clear(Color::Black);
+            window.draw(ChoicePlayer);
+            window.draw(OnePlayer);
+            window.draw(TwoPlayer);
+            window.display();
+            Event event;
+            while (window.pollEvent(event)) {
+                //Game close
+                if (event.type == Event::Closed) {
+                    window.close();
+                    return 0;
+                }
+                if ((Keyboard::isKeyPressed(Keyboard::Left)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x <= window.getSize().x / 2)) {
+                    CharacterPicked = false;
+                    NumberOfPlayers = 1;
+                    ChoicePlayer.setString("Choice Your Player");
+                    ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
+                }
+                if ((Keyboard::isKeyPressed(Keyboard::Right)) || (event.type == Event::MouseButtonPressed && event.mouseButton.button == Mouse::Left && event.mouseButton.x > window.getSize().x / 2)) {
+                    NumberOfPlayers = 2;
+                }
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Escape)) { window.close(); return 0; }
         }
-
         while (!CharacterPicked && NumberOfPlayers == 1) {
             UpdateCharacterPicker();
             DrawCharacterPicker();
@@ -172,9 +195,11 @@ int main() {
             }
         }
         //game close
-        if ((Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() > 1 && NumberOfPlayers == 1) || (Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() < 1 && PlayablePlayers[1]->Gethp() < 1 && NumberOfPlayers == 2)) { // nie dzia³¹ dla 2 graczy
+        if ((Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() < 1 && NumberOfPlayers == 1) || (Keyboard::isKeyPressed(Keyboard::Enter) && PlayablePlayers[0]->Gethp() < 1 && PlayablePlayers[1]->Gethp() < 1 && NumberOfPlayers == 2)) {
             PlayedTime.setString("");
             LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
+            ChoicePlayer.setString("Wanna Lose Some Friends?");
+            ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
             CharacterPicked = false;
             explosions.clear();
             enemies.clear();
@@ -183,25 +208,28 @@ int main() {
             boosts.clear();
             PlayablePlayers.clear();
             CurrentPoints.clear();
-            NumberOfPlayers == 0;
+            NumberOfPlayers = 0;
         }
         if (Keyboard::isKeyPressed(Keyboard::Escape)) {
             window.close();
         }
-        if ((PlayablePlayers[0]->Gethp() > 0 && NumberOfPlayers == 1)) {
-            EnemySpawner();
-            GameFactor();
-            Update();
-            Draw();
+        if (NumberOfPlayers == 1) {
+            if (PlayablePlayers[0]->Gethp() > 0) {
+                EnemySpawner();
+                GameFactor();
+                Update();
+                Draw();
+            }
+            else { GameOver(); }
         }
-        else if ((PlayablePlayers[0]->Gethp() > 0 || PlayablePlayers[1]->Gethp() > 0) && NumberOfPlayers == 2) {   // Poprawiæ warunek by wywala³ sie jak jeden straci Hp tylko oba
-            EnemySpawner();
-            GameFactor();
-            Update();
-            Draw();
-        }
-        else{
-            GameOver();
+        if (NumberOfPlayers == 2) {
+            if (PlayablePlayers[0]->Gethp() > 0 || PlayablePlayers[1]->Gethp() > 0) { 
+                EnemySpawner();
+                GameFactor();
+                Update();
+                Draw();
+            }
+            else { GameOver(); }
         }
     }
     return 0;
@@ -269,7 +297,7 @@ void Update() {
         PlayablePlayers[i]->ExhaustAnimation(ExhaustCounter);
         PlayablePlayers[i]->InvincibilityEndCheck(TimeFactor);
         }
-        if (NumberOfPlayers == 2){
+        else if (NumberOfPlayers == 2){
             for (int j = 0; j < enemies.size(); j++) {
                 if (enemies[j]->GetClassName() == "SEEKER") {
                     if (PlayablePlayers[0]->Gethp() < 1) {
@@ -519,6 +547,8 @@ void SetStartingVariablesAndOptions() {
     ChoicePlayer.setFont(font);
     ChoicePlayer.setCharacterSize(window.getSize().y / 9);
     ChoicePlayer.setFillColor(Color::White);
+    ChoicePlayer.setString("Wanna Lose Some Friends?");
+    ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
     pressEsc.setFont(font);
     pressEsc.setFillColor(Color::White);
     pressEsc.setCharacterSize(window.getSize().y / 15);
@@ -526,6 +556,16 @@ void SetStartingVariablesAndOptions() {
     PlayedTime.setFont(font);
     PlayedTime.setCharacterSize(window.getSize().y / 12);
     PlayedTime.setFillColor(Color::White);
+    OnePlayer.setFont(font);
+    OnePlayer.setFillColor(Color::White);
+    OnePlayer.setString("1 Player");
+    OnePlayer.setCharacterSize(window.getSize().x / 15);
+    OnePlayer.setPosition(window.getSize().x / 4 - (OnePlayer.getGlobalBounds().width / 2), window.getSize().y / 2 - (OnePlayer.getGlobalBounds().height / 2));
+    TwoPlayer.setFont(font);
+    TwoPlayer.setFillColor(Color::White);
+    TwoPlayer.setString("2 Players");
+    TwoPlayer.setCharacterSize(window.getSize().x / 15);
+    TwoPlayer.setPosition(window.getSize().x / 4 * 3 - (OnePlayer.getGlobalBounds().width / 2), window.getSize().y / 2 - (OnePlayer.getGlobalBounds().height / 2));
     Boost_invincible::BodyTexture.loadFromFile("./Resourses/sprites/black_hole_background.png");
     Boost_hp::BodyTexture.loadFromFile("./Resourses/sprites/Heart.png");
     Enemy_normal::BodyTexture.loadFromFile("./Resourses/sprites/Ship1.png");
@@ -545,8 +585,6 @@ void SetStartingVariablesAndOptions() {
     Parts_normal::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship1.png"); 
     Parts_boost::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship2.png"); 
     Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png"); 
-    ChoicePlayer.setString("Choose Your Player!");
-    ChoicePlayer.setPosition((window.getSize().x - ChoicePlayer.getGlobalBounds().width) / 2, (window.getSize().y - ChoicePlayer.getGlobalBounds().height) / 5);
     CharacterPickerPlayers[0] = new Player_5(window, false);
     CharacterPickerPlayers[1] = new Player_6(window, false);
 }
