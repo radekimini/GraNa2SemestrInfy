@@ -262,21 +262,21 @@ void Draw() {
     window.display();
 }
 void Update() {
-    //update ruchu playerów
+    //update ruchu playerów i seekerów
     for (int i = 0; i < PlayablePlayers.size(); i++) {
         if (PlayablePlayers[i]->Gethp() > 0) {
         PlayablePlayers[i]->PlayerMovement(window, i);
         PlayablePlayers[i]->ExhaustAnimation(ExhaustCounter);
         PlayablePlayers[i]->InvincibilityEndCheck(TimeFactor);
         }
-        else if (NumberOfPlayers == 2){
-            for (int i = 0; i < enemies.size(); i++) {
-                if (enemies[i]->GetClassName() == "SEEKER") {
-                    if (PlayablePlayers[0]->Gethp() == 0) {
-                        enemies[i]->SetSeekingWhom(1);
+        if (NumberOfPlayers == 2){
+            for (int j = 0; j < enemies.size(); j++) {
+                if (enemies[j]->GetClassName() == "SEEKER") {
+                    if (PlayablePlayers[0]->Gethp() < 1) {
+                        enemies[j]->SetSeekingWhom(1);
                     }
                     else {
-                        enemies[i]->SetSeekingWhom(0);
+                        enemies[j]->SetSeekingWhom(0);
                     }
                 }
             }
@@ -320,7 +320,7 @@ void Update() {
             if (projectiles[i]->GetBody().getGlobalBounds().intersects(enemies[j]->GetBody().getGlobalBounds())) {
                 if (enemies[j]->GetClassName() == "BOOST") {
                     int spawnCheck = rand() % 101;
-                    spawnCheck = 1;
+                    //spawnCheck = 1;
                     if (spawnCheck < 20) {
                         boosts.push_back(new Boost_invincible(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y), TimeFactor));
                     }
@@ -328,7 +328,7 @@ void Update() {
                 }
                 else if (enemies[j]->GetClassName() == "SEEKER") {
                     int spawnCheck = rand() % 101;
-                    spawnCheck = 1;
+                    //spawnCheck = 1;
                     if (spawnCheck < 10) {
                         boosts.push_back(new Boost_hp(Vector2f(enemies[j]->GetBody().getPosition().x, enemies[j]->GetBody().getPosition().y), TimeFactor));
                     }
@@ -336,7 +336,7 @@ void Update() {
                 }
                 else if (enemies[j]->GetClassName() == "NORMAL") {
                     int spawnCheck = rand() % 101;
-                    spawnCheck = 1;
+                    //spawnCheck = 1;
                     if (spawnCheck < 10) {
                         if (NumberOfPlayers == 1) {
                             boosts.push_back(new Boost_Skill(Vector2f(enemies[j]->GetBody().getPosition().x-55, enemies[j]->GetBody().getPosition().y), TimeFactor,PlayablePlayers[0]->GetWich()));
@@ -453,7 +453,7 @@ void EnemySpawner() {
         int SpawnCheck = rand() % 101;
         if (SpawnCheck < 2.0 + ((DificultyFactor - 1.0) * 10.0) + 1.0) {
             int whitchEnemy = rand() % 3;
-            whitchEnemy = 2;
+            //whitchEnemy = 2;
             //std::cout << whitch << std::endl;
             int pos = 50 + rand() % (window.getSize().y - 200);
             if (whitchEnemy == 0) {
@@ -469,10 +469,10 @@ void EnemySpawner() {
                 if (NumberOfPlayers == 2) {
                     if (secondPlayerGotKilled) {
                         if (PlayablePlayers[0]->Gethp() < 1) {
-                            enemies.push_back(new Enemy_seeker(pos, window, 0));
+                            enemies.push_back(new Enemy_seeker(pos, window, 1));
                         }
                         else {
-                            enemies.push_back(new Enemy_seeker(pos, window, 1));
+                            enemies.push_back(new Enemy_seeker(pos, window, 0));
                         }
                     }
                     else {
@@ -585,7 +585,7 @@ void GameOverFontSet() {
             LastScore.setString("PLAYER 1 WINS: " + std::to_string(PlayablePlayers[0]->GetPoints()));
         }
         else {
-            LastScore.setString("PLAYER 2 WINS: " + std::to_string(PlayablePlayers[0]->GetPoints()));
+            LastScore.setString("PLAYER 2 WINS: " + std::to_string(PlayablePlayers[1]->GetPoints()));
         }
     }
     LastScore.setPosition((window.getSize().x - LastScore.getGlobalBounds().width) / 2, (window.getSize().y - LastScore.getGlobalBounds().height) / 5);
