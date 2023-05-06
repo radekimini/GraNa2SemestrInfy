@@ -12,8 +12,8 @@ void Parts::PartsDraw(RenderWindow& window) {
 		window.draw(parts[i]);
 	}
 }
-Sprite Parts::GetPart(int i) { return parts[i]; }
 bool Parts::PartsDissaper(float CurrentTimeFactor) {
 	if (CurrentTimeFactor - SpawnTimeFactor >= 0.03) { return true; }
 	else { return false; }
 }
+Sprite Parts::GetPart(int i) { return parts[i]; }

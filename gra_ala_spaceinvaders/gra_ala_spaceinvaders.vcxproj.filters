@@ -141,6 +141,9 @@
     <ClCompile Include="Parts_seeker.cpp">
       <Filter>Parts\Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="Parts_seeker.h">
       <Filter>Parts\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

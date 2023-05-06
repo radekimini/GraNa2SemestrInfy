@@ -7,8 +7,5 @@ public:
 	static Texture BodyTexture;
 	Boost_hp(Vector2f vec, float factor);
 	std::string GetClassName();
-	//void AnimateBoost();
-	//void AnimationCounterer();
-
 };
 

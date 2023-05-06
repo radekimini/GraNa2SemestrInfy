@@ -11,7 +11,6 @@ protected:
 	Sprite Body;
 	int AnimationCounter;
 	int AnimationFrame;
-	//Sprite Body;
 public:
 	Boost(Vector2f vec,float factor,Texture tex);
 	Boost();
@@ -20,6 +19,4 @@ public:
 	virtual std::string GetClassName();
 	virtual void AnimateBoost();
 	virtual void AnimationCounterer();
-
 };
-
