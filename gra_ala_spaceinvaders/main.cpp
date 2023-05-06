@@ -1,7 +1,7 @@
 // Code lines: 1700
 // Classes number: 21
 //
-// Game writen By Rados³¹w Olejniczak
+// Game writen By Rados³aw Olejniczak
 // Copping and Sharing without permission ist verbotten
 // For Education or Fun purpoces only
 //
@@ -29,7 +29,7 @@ int main() {
     while (window.isOpen()) {
 
         game.Play(window);
-        if (Keyboard::isKeyPressed(Keyboard::Escape)) { window.close(); }
+        if (Keyboard::isKeyPressed(Keyboard::Escape)) { window.close(); return 0; }
 
     }
     return 0;
