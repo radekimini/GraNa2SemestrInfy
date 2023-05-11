@@ -29,7 +29,7 @@ int main() {
     while (window.isOpen()) {
 
         game.Play(window);
-        if (Keyboard::isKeyPressed(Keyboard::Escape)) { window.close(); return 0; }
+        if (Keyboard::isKeyPressed(Keyboard::Escape)) { window.close(); break; }
 
     }
     return 0;
