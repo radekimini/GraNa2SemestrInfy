@@ -27,14 +27,18 @@
 #include "Parts_seeker.h"
 #include "Parts_boost.h"
 #include "Parts_normal.h"
+#include "EnemyBullet.h"
 
 using namespace sf;
 class Game
 {
-protected:
-
-	std::vector<Player*>PlayablePlayers;
+private:
 	Player* CharacterPickerPlayers[2];
+
+protected:
+	sf::Clock clock;
+	sf::Time elapsed;
+	std::vector<Player*>PlayablePlayers;
 
 	bool CharacterPicked;
 	bool secondPlayerGotKilled;

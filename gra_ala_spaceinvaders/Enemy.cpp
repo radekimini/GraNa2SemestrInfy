@@ -27,9 +27,9 @@ bool Enemy::EnemyAtEnd(RenderWindow& window) {
 		return false;
 	}
 }
-void Enemy::EnemyMovement(float factor, std::vector<Player*>& PlayablePlayers) {
-	Body.move(-6 - ((factor-1) * 10), 0);
-	Exhaust.move(-6 - ((factor-1) * 10), 0);
+void Enemy::EnemyMovement(float factor, std::vector<Player*>& PlayablePlayers,float time,std::vector<Enemy*> &enemies) {
+	Body.move((-6 - ((factor-1) * time)), 0);
+	Exhaust.move((-6 - ((factor - 1) * time)), 0);
 }
 std::string Enemy::GetClassName() {
 	return "BASIC";

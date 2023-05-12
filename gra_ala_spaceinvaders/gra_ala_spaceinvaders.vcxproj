@@ -153,6 +153,7 @@
     <ClCompile Include="Bullet_5.cpp" />
     <ClCompile Include="Bullet_6.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Enemy_boost.cpp" />
     <ClCompile Include="Enemy_normal.cpp" />
     <ClCompile Include="Enemy_seeker.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Bullet_5.h" />
     <ClInclude Include="Bullet_6.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Enemy_boost.h" />
     <ClInclude Include="Enemy_normal.h" />
     <ClInclude Include="Enemy_seeker.h" />

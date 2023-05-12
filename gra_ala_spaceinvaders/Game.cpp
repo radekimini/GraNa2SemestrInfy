@@ -27,7 +27,7 @@ Game::Game(RenderWindow &window) {
 }
 
 void Game::Play(RenderWindow &window) {
-    
+    elapsed = clock.restart();
     while (NumberOfPlayers == 0) {
             window.clear(Color::Black);
             window.draw(ChoicePlayer);
@@ -70,9 +70,6 @@ void Game::Play(RenderWindow &window) {
                 PlayablePlayers.push_back(new Player_6(window, true));
             }
         }
-        if (Keyboard::isKeyPressed(Keyboard::Escape)) {
-            window.close();
-        }
         if (CharacterPicked) {
             CurrentPoints.push_back(Text());
             CharacterPickerPlayers[0];
@@ -110,9 +107,7 @@ void Game::Play(RenderWindow &window) {
 
     while (window.pollEvent(event)) {
     //Game close
-        if (event.type == Event::Closed) {
-            window.close();
-        }
+        //tryb gry
         if (PlayablePlayers[0]->Gethp() > 0) {
             if (event.type == Event::KeyPressed && event.key.code == Keyboard::Space) {
                 PlayablePlayers[0]->Schoot(projectiles);
@@ -146,6 +141,7 @@ void Game::Play(RenderWindow &window) {
         CurrentPoints.clear();
         NumberOfPlayers = 0;
     }
+    //koniec gry
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
         window.close();
     }
@@ -170,6 +166,7 @@ void Game::Play(RenderWindow &window) {
 }
 
 void Game::DrawCharacterPicker(RenderWindow& window) {
+    //rysowanie wyboru postaci
     window.clear(Color::Black);
     for (int i = 0; i < explosions.size(); i++) {
         window.draw(explosions[i]->GetBody());
@@ -232,7 +229,7 @@ void Game::UpdateCharacterPicker(RenderWindow& window) {
     }
     //ruch enemies
     for (int i = 0; i < enemies.size(); i++) {
-        enemies[i]->EnemyMovement(DificultyFactor, PlayablePlayers);
+        enemies[i]->EnemyMovement(DificultyFactor, PlayablePlayers,elapsed.asMilliseconds(),enemies);
     }
     //strzelanie playerow
     if (TimeFactorCounter == 15) {
@@ -262,6 +259,7 @@ void Game::Draw(RenderWindow& window) {
     window.draw(BackGroundImage);
     window.draw(BackGroundGalaxyImage);
     window.draw(Planet1BackGroundImage);
+    //rysowanie partsow
     for (int i = 0; i < enemiesParts.size(); i++) {
         enemiesParts[i]->PartsDraw(window);
     }
@@ -318,7 +316,7 @@ void Game::Update(RenderWindow& window){
     //update ruchu playerów i seekerów
     for (int i = 0; i < PlayablePlayers.size(); i++) {
         if (PlayablePlayers[i]->Gethp() > 0) {
-            PlayablePlayers[i]->PlayerMovement(window, i);
+            PlayablePlayers[i]->PlayerMovement(window, i,elapsed.asMilliseconds());
             PlayablePlayers[i]->ExhaustAnimation(ExhaustCounter);
             PlayablePlayers[i]->InvincibilityEndCheck(TimeFactor);
         }
@@ -365,7 +363,7 @@ void Game::Update(RenderWindow& window){
                 PlayablePlayers[0]->TakePoints(50);
             }
         }
-        enemies[i]->EnemyMovement(DificultyFactor, PlayablePlayers);
+        enemies[i]->EnemyMovement(DificultyFactor, PlayablePlayers, elapsed.asMilliseconds(), enemies);
     }
     // kolizja buulet z enemies
     for (int i = 0; i < projectiles.size(); i++) {
@@ -583,6 +581,7 @@ void Game::SetFont(RenderWindow &window) {
     Parts_normal::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship1.png");
     Parts_boost::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship2.png");
     Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png");
+    EnemyBullet::BodyTexture.loadFromFile("./Resourses/sprites/EnemySchoot.png");
     BackGroundTexture.loadFromFile("./Resourses/sprites/SpaceBackground.png");
     BackGroundGalaxyTexture.loadFromFile("./Resourses/sprites/galaxy_background.png");
     Planet1BackGroundTexture.loadFromFile("./Resourses/sprites/IcePlanetBackGround.png");
@@ -598,6 +597,7 @@ void Game::SetFont(RenderWindow &window) {
     CharacterPickerPlayers[1] = new Player_6(window, false);
 }
 void Game::GameOver(RenderWindow& window) {
+    //okno koñca gry
     window.clear(Color::Black);
     if (PlayedTime.getString() == "") {
             if (PlayablePlayers.size() == 1) {
@@ -639,11 +639,14 @@ void Game::ExhaustCount() {
     }
 }
 void Game::EnemySpawner(RenderWindow& window) {
+    //spawnowanie przeciwnikow
     if (Enemy::SpawnTimer > (46 - (TimeFactor * 5))) {
+        // losowanie czy ma siê pojawic enemy
         int SpawnCheck = rand() % 101;
         if (SpawnCheck < 2.0 + ((DificultyFactor - 1.0) * 10.0) + 1.0) {
+            //jaki przeciwnik
             int whitchEnemy = rand() % 3;
-            //whitchEnemy = 2;
+            //whitchEnemy = 1;
             //std::cout << whitch << std::endl;
             int pos = 50 + rand() % (window.getSize().y - 200);
             if (whitchEnemy == 0) {
@@ -656,6 +659,7 @@ void Game::EnemySpawner(RenderWindow& window) {
                 if (PlayablePlayers.size() == 1) {
                     enemies.push_back(new Enemy_seeker(pos, window));
                 }
+                //losowanie podarzania jak jest 2 graczy
                 if (PlayablePlayers.size() == 2) {
                     if (secondPlayerGotKilled) {
                         if (PlayablePlayers[0]->Gethp() < 1) {
@@ -675,9 +679,15 @@ void Game::EnemySpawner(RenderWindow& window) {
     }
     else { Enemy::SpawnTimer++; }
 }
+void Game::CurrentPointsFontSet(RenderWindow &window) {
+    for (int i = 0; i < CurrentPoints.size(); i++) {
+        CurrentPoints[i].setFont(font);
+        CurrentPoints[i].setCharacterSize(window.getSize().y / 30);
+        CurrentPoints[i].setFillColor(Color::White);
+    }
+}
 
 // gety
-//RenderWindow Game::GetWindow() { return window; }
 float Game::GetDificultyFactor() { return DificultyFactor; }
 unsigned int Game::GetDificultyFactorCounter() { return DificultyFactorCounter; }
 unsigned int Game::GetTextEscCounter() { return textEscCounter; }
@@ -686,11 +696,3 @@ std::vector<Text> Game::GetCurrentPoints() { return CurrentPoints; }
 Text Game::GetPressEsc() { return pressEsc; }
 std::vector<Player*> Game::GetPlayer() { return PlayablePlayers; }
 // sety
-
-void Game::CurrentPointsFontSet(RenderWindow &window) {
-    for (int i = 0; i < CurrentPoints.size(); i++) {
-        CurrentPoints[i].setFont(font);
-        CurrentPoints[i].setCharacterSize(window.getSize().y / 30);
-        CurrentPoints[i].setFillColor(Color::White);
-    }
-}

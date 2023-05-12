@@ -13,12 +13,11 @@ public:
 	~Enemy();
 	static int SpawnTimer;
 	virtual bool EnemyAtEnd(RenderWindow& window);
-	virtual void EnemyMovement(float factor, std::vector<Player*>& PlayablePlayers);
+	virtual void EnemyMovement(float factor, std::vector<Player*>& PlayablePlayers,float time, std::vector<Enemy*> &enemies);
 	virtual void ExhaustAnimate(int ExhaustCounter);
 	virtual Sprite GetBody();
 	virtual Sprite GetExhaust();
 	virtual std::string GetClassName();
 	virtual void SetSeekingWhom(int _SeekingWhom);
-
 };
 

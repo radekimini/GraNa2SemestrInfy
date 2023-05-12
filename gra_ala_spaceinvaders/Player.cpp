@@ -13,7 +13,7 @@ Player::Player() {
     DificultyFactorWhenInvinciblility = 0;
     InvincibilityTime = 0;
 }
-void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
+void Player::PlayerMovement(RenderWindow &window, int WitchMovement,float time) {
     if (WitchMovement == 0) {
         if (Keyboard::isKeyPressed(Keyboard::W) && ship.getGlobalBounds().top >= 0) {
             movementY = -1 * MovementFactor;
@@ -78,8 +78,8 @@ void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
             movementX = 0;
         }
     }
-    ship.move(movementX, movementY);
-    Exhaust.move(movementX, movementY);
+    ship.move(movementX * time / 16, movementY * time / 16);
+    Exhaust.move(movementX * time / 16, movementY * time / 16);
 }
 void Player::Schoot(std::vector<Bullet*>& projectiles) {}
 void Player::GetKill(float factor) {

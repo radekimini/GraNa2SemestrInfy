@@ -23,7 +23,7 @@ protected:
 public:
 	Player();
 	static Texture HeartTexture;
-	virtual void PlayerMovement(RenderWindow &window, int WitchMovement = 0);
+	virtual void PlayerMovement(RenderWindow &window, int WitchMovement = 0,float time = 16);
 	virtual void Schoot(std::vector<Bullet*>& projectiles);
 	virtual void ReciveDamage();
 	virtual void ShowHp(float i, RenderWindow& window,int PlayerNumer = 1);

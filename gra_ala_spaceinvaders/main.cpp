@@ -19,9 +19,9 @@ void SetStartingVariablesAndOptions();
 RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Super Gra!!!", Style::Fullscreen);
 //RenderWindow window(VideoMode(1000,600), "Super Gra!!!", Style::Default);
 
-Game game(window);
 
 int main() {
+    Game game(window);
     srand(time(NULL));
     window.setFramerateLimit(60);
     SetStartingVariablesAndOptions();
@@ -29,7 +29,6 @@ int main() {
     while (window.isOpen()) {
 
         game.Play(window);
-        if (Keyboard::isKeyPressed(Keyboard::Escape)) { window.close(); break; }
 
     }
     return 0;
@@ -56,5 +55,5 @@ void SetStartingVariablesAndOptions() {
     Parts_normal::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship1.png"); 
     Parts_boost::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship2.png"); 
     Parts_seeker::BodyTexture.loadFromFile("./Resourses/sprites/Parts_ship3.png"); 
-
+    EnemyBullet::BodyTexture.loadFromFile("./Resourses/sprites/EnemySchoot.png");
 }
