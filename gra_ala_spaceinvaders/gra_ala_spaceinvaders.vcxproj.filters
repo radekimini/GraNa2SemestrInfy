@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Pliki nagłówkowe">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Enemies">
       <UniqueIdentifier>{0fddfc00-087a-4eb7-8ccc-60e9f5a64560}</UniqueIdentifier>
     </Filter>
@@ -72,6 +68,10 @@
     </Filter>
     <Filter Include="Parts\Pliki nagłówkowe">
       <UniqueIdentifier>{66945274-de18-4c97-aa90-6f3b6a18a4db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\Pliki nagłówkowe">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +141,12 @@
     <ClCompile Include="Parts_seeker.cpp">
       <Filter>Parts\Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>Enemies\Enemy źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h">
@@ -205,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="Parts_seeker.h">
       <Filter>Parts\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Pliki źródłowe\Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>Enemies\enemy nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

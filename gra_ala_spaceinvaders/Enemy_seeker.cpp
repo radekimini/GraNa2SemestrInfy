@@ -15,8 +15,8 @@ Enemy_seeker::Enemy_seeker(int pos, RenderWindow& window, int _SeekingWhom) {
 std::string Enemy_seeker::GetClassName() {
 	return "SEEKER";
 }
-void Enemy_seeker::EnemyMovement(float factor, std::vector<Player*>& Players) {
-	Body.move(-6 - ((factor - 1) * 10), ((Players[SeekingWhom]->GetShip().getPosition().y + (Players[SeekingWhom]->GetShip().getGlobalBounds().height / 2)) - Body.getPosition().y) / (30 - (factor * 5)));
+void Enemy_seeker::EnemyMovement(float factor, std::vector<Player*>& Players,float time, std::vector<Enemy*>& enemies) {
+	Body.move((-6 - ((factor - 1) * time)), ((Players[SeekingWhom]->GetShip().getPosition().y + (Players[SeekingWhom]->GetShip().getGlobalBounds().height / 2)) - Body.getPosition().y) / (30 - (factor * (time/3))));
 }
 void Enemy_seeker::ExhaustAnimate(int ExhaustCounter) {
 	if (ExhaustCounter == 10) {

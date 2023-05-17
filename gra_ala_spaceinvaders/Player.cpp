@@ -13,30 +13,30 @@ Player::Player() {
     DificultyFactorWhenInvinciblility = 0;
     InvincibilityTime = 0;
 }
-void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
+void Player::PlayerMovement(RenderWindow &window, int WitchMovement,float time) {
     if (WitchMovement == 0) {
-        if (Keyboard::isKeyPressed(Keyboard::W) && ship.getPosition().y >= 0) {
+        if (Keyboard::isKeyPressed(Keyboard::W) && ship.getGlobalBounds().top >= 0) {
             movementY = -1 * MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::W) && ship.getPosition().y < 0) {
+        if (Keyboard::isKeyPressed(Keyboard::W) && ship.getGlobalBounds().top < 0) {
             movementY = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::S) && ship.getPosition().y + ship.getGlobalBounds().height <= window.getSize().y) {
+        if (Keyboard::isKeyPressed(Keyboard::S) && ship.getGlobalBounds().top + ship.getGlobalBounds().height <= window.getSize().y) {
             movementY = MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::S) && ship.getPosition().y + ship.getGlobalBounds().height  > window.getSize().y) {
+        if (Keyboard::isKeyPressed(Keyboard::S) && ship.getGlobalBounds().top + ship.getGlobalBounds().height  > window.getSize().y) {
             movementY = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::D) && ship.getPosition().x <= window.getSize().x) {
+        if (Keyboard::isKeyPressed(Keyboard::D) && ship.getGlobalBounds().left + ship.getGlobalBounds().width <= window.getSize().x) {
             movementX = MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::D) && ship.getPosition().x > window.getSize().x) {
+        if (Keyboard::isKeyPressed(Keyboard::D) && ship.getGlobalBounds().left + ship.getGlobalBounds().width  > window.getSize().x) {
             movementX = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::A) && ship.getPosition().x >= 5) {
+        if (Keyboard::isKeyPressed(Keyboard::A) && ship.getGlobalBounds().left >= 0) {
             movementX = -1 * MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::A) && ship.getPosition().x < 5) {
+        if (Keyboard::isKeyPressed(Keyboard::A) && ship.getGlobalBounds().left < 0) {
             movementX = 0;
         }
         if (!Keyboard::isKeyPressed(Keyboard::W) && !Keyboard::isKeyPressed(Keyboard::S)) {
@@ -47,28 +47,28 @@ void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
         }
     }
     if (WitchMovement == 1) {
-        if (Keyboard::isKeyPressed(Keyboard::Up) && ship.getPosition().y >= 0) {
+        if (Keyboard::isKeyPressed(Keyboard::Up) && ship.getGlobalBounds().top >= 0) {
             movementY = -1 * MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Up) && ship.getPosition().y < 0) {
+        if (Keyboard::isKeyPressed(Keyboard::Up) && ship.getGlobalBounds().top < 0) {
             movementY = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Down) && ship.getPosition().y + ship.getGlobalBounds().height <= window.getSize().y) {
+        if (Keyboard::isKeyPressed(Keyboard::Down) && ship.getGlobalBounds().top + ship.getGlobalBounds().height <= window.getSize().y) {
             movementY = MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Down) && ship.getPosition().y + ship.getGlobalBounds().height  > window.getSize().y) {
+        if (Keyboard::isKeyPressed(Keyboard::Down) && ship.getGlobalBounds().top + ship.getGlobalBounds().height  > window.getSize().y) {
             movementY = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x <= window.getSize().x) {
+        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getGlobalBounds().left + ship.getGlobalBounds().width <= window.getSize().x) {
             movementX = MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getPosition().x > window.getSize().x) {
+        if (Keyboard::isKeyPressed(Keyboard::Right) && ship.getGlobalBounds().left + ship.getGlobalBounds().width > window.getSize().x) {
             movementX = 0;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x >= 5) {
+        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getGlobalBounds().left >= 0) {
             movementX = -1 * MovementFactor;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getPosition().x < 5) {
+        if (Keyboard::isKeyPressed(Keyboard::Left) && ship.getGlobalBounds().left < 0) {
             movementX = 0;
         }
         if (!Keyboard::isKeyPressed(Keyboard::Up) && !Keyboard::isKeyPressed(Keyboard::Down)) {
@@ -78,8 +78,8 @@ void Player::PlayerMovement(RenderWindow &window, int WitchMovement) {
             movementX = 0;
         }
     }
-    ship.move(movementX, movementY);
-    Exhaust.move(movementX, movementY);
+    ship.move(movementX * time / 16, movementY * time / 16);
+    Exhaust.move(movementX * time / 16, movementY * time / 16);
 }
 void Player::Schoot(std::vector<Bullet*>& projectiles) {}
 void Player::GetKill(float factor) {
